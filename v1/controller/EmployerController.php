@@ -180,13 +180,22 @@ class EmployerController
     public function editProfileEmployer(Request $request, Response $response){
         if ($this->session->get('logged_in') == true) {
             $background = json_decode($request->getBody())->background;
+            $company_size = json_decode($request->getBody())->company_size;
+            $company_website = json_decode($request->getBody())->company_website;
+            $company_benefits = json_decode($request->getBody())->company_benefits;
+            $dress_code = json_decode($request->getBody())->dress_code;
+            $spoken_language = json_decode($request->getBody())->spoken_language;
+            $company_work_hours = json_decode($request->getBody())->company_work_hours;
             $location = json_decode($request->getBody())->location;
             $id = $this->session->get('id');
-
+            var_dump($id);
             #update employer_profile table
             $sql_edit_profile = $this->db->prepare
-                ("UPDATE employer_profile SET background = ?, location = ? WHERE id = ?");
-            $result = $sql_edit_profile->execute([$background, $location, $id]);
+                ("UPDATE employer_profile SET background = ?, company_size = ?, company_website = ?, 
+                        company_benefits = ?, dress_code = ?, spoken_language = ?, company_work_hours = ?, 
+                        location = ? WHERE id = ?");
+            $result = $sql_edit_profile->execute([$background, $company_size, $company_website, $company_benefits,
+                $dress_code, $spoken_language, $company_work_hours, $location, $id]);
 
             #if insert into employer_profile successful
             if ($result == true){
@@ -200,7 +209,143 @@ class EmployerController
         }
         else {
             $message = "Please log in to edit your profile";
-            return $response->withJson($message, 400);
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function addVacancy(Request $request, Response $response){
+        if ($this->session->get('logged_in') == true) {
+            $v_name = json_decode($request->getBody())->v_name;
+            $v_desc = json_decode($request->getBody())->v_desc;
+            $v_salary = json_decode($request->getBody())->v_salary;
+            $v_location = json_decode($request->getBody())->v_location;
+            $v_requirements = json_decode($request->getBody())->v_requirements;
+            $v_position = json_decode($request->getBody())->v_position;
+            $v_closing_date = json_decode($request->getBody())->v_closing_date;
+            $vacancy_id = $this->generateUniqueVacancyID();
+            $id = $this->session->get('id');
+            $company_name = $this->session->get('company_name');
+
+            $sql_add_vacancy = $this->db->prepare
+            ("INSERT INTO vacancies (id, vacancy_id, company_name, v_name, v_desc, v_salary, v_location, 
+                v_requirements, v_position, v_closing_date) VALUES 
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $result = $sql_add_vacancy->execute
+            (array($id, $vacancy_id, $company_name, $v_name, $v_desc, $v_salary, $v_location, $v_position,
+                $v_requirements, $v_closing_date));
+
+            if ($result == true){
+                $sql_set_vacancies_true = $this->db->prepare("UPDATE employer_profile SET vacancies = 1 WHERE id = ?");
+                $result_vacancies = $sql_set_vacancies_true->execute(array($id));
+
+                if ($result_vacancies == true){
+                    $message = "Job added successfully!";
+                    return $response->withJson($message, 201);
+                }
+                else{
+                    $message = "Vacancy profile error";
+                    return $response->withJson($message, 500);
+                }
+            }
+            else{
+                $message = "Job not added!";
+                return $response->withJson($message, 500);
+            }
+        }
+        else{
+            $message = "Please log in to add a vacancy";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function editVacancy(Request $request, Response $response, array $args){
+        if ($this->session->get('logged_in') == true) {
+            $v_name = json_decode($request->getBody())->v_name;
+            $v_desc = json_decode($request->getBody())->v_desc;
+            $v_salary = json_decode($request->getBody())->v_salary;
+            $v_location = json_decode($request->getBody())->v_location;
+            $v_requirements = json_decode($request->getBody())->v_requirements;
+            $v_position = json_decode($request->getBody())->v_position;
+            $v_closing_date = json_decode($request->getBody())->v_closing_date;
+            $vacancy_id = $args['vacancy_id'];
+            $id = $this->session->get('id');
+            $company_name = $this->session->get('company_name');
+
+            $sql_edit_vacancy = $this->db->prepare
+                ("UPDATE vacancies SET v_name = ?, v_desc = ?, v_salary = ?, v_location = ?, v_requirements = ?,
+                v_position = ?, v_closing_date = ? WHERE vacancy_id = ?");
+            $result = $sql_edit_vacancy->execute(array($v_name, $v_desc, $v_salary, $v_location, $v_requirements,
+                $v_position, $v_closing_date, $vacancy_id));
+
+            if ($result == true){
+                $message = "Vacancy edited!";
+                return $response->withJson($message, 200);
+            }
+            else{
+                $message = "Unable to edit vacancy";
+                return $response->withJson($message, 500);
+            }
+        }
+        else{
+            $message = "Please log in to edit this vacancy";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    /*public function deleteVacancy(Request $request, Response $response, array $args){
+        if ($this->session->get('logged_in') == true) {
+            $vacancy_id = $args['vacancy_id'];
+            $sql_delete_vacancy = $this->db->prepare("DELETE FROM vacancies WHERE id = ?");
+            $result = $sql_delete_vacancy->execute(array($vacancy_id));
+
+            if ($result == true){
+                $message = "Vacancy deleted!";
+                return $response->withJson($message, 200);
+            }
+            else{
+                $message = "Unable to delete vacancy";
+                return $response->withJson($message, 500);
+            }
+        }
+        else{
+            $message = "Please log in to delete this vacancy";
+            return $response->withJson($message, 403);
+        }
+    }*/
+
+    public function viewEmployerVacancies(Request $request, Response $response){
+        if ($this->session->get('logged_in') == true) {
+            $sql_get_posted_vacancies = $this->db->prepare
+            ("SELECT v_name, v_position FROM vacancies WHERE id = ?");
+            $result = $sql_get_posted_vacancies->execute(array($this->session->get('id')));
+            //$result = $this->db->query($sql_get_profile);
+
+            if ($result == true) {
+                while ($row = $sql_get_posted_vacancies->fetch(PDO::FETCH_ASSOC)) {
+                    $data[] = $row;
+                    echo json_encode($data);
+                }
+                return $response->withStatus(200);
+            }
+            else {
+                $data = "No data found, edit profile now";
+                return $response->withJson($data, 400);
+            }
+        }
+        else{
+            $message = "Please log in to view your posted vacancies";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function viewVacancyApplicants(Request $request, Response $response, array $args){
+        if ($this->session->get('logged_in') == true) {
+            $vacancy_id = $args['vacancy_id'];
+
+        }
+        else{
+            $message = "Please log in to view applicants for vacancies";
+            return $response->withJson($message, 403);
         }
     }
 }

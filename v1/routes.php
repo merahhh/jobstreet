@@ -18,6 +18,12 @@ $app->group('/v1', function (App $app) {
         #edit profile employee
         $app->put('/profile/edit', EmployeeController::class . ':editProfileEmployee');
 
+        #apply for job
+        $app->post('/vacancies/{vacancy_id}/apply', EmployeeController::class . ':applyVacancy');
+
+        #view job applications
+        $app->get('/profile/vacancies_applied', EmployeeController::class . ':viewApplications');
+
         #logout employee
         $app->post('/logout', EmployeeController::class . ':logoutEmployee');
     });
@@ -37,5 +43,28 @@ $app->group('/v1', function (App $app) {
 
         #edit profile employer
         $app->put('/profile/edit', EmployerController::class . ':editProfileEmployer');
+
+        #add vacancy
+        $app->post('/vacancy/add', EmployerController::class . ':addVacancy');
+
+        #edit vacancy
+        $app->put('/vacancy/{vacancy_id}/edit', EmployerController::class . ':editVacancy');
+
+        #delete vacancy
+        $app->delete('/vacancy/{vacancy_id}/delete', EmployerController::class . ':deleteVacancy');
+
+        #view posted vacancies
+        $app->get('/vacancy/all', EmployerController::class . ':viewEmployerVacancies');
+
+        #view vacancy applicants
+        $app->get('/vacancy/{vacancy_id}/view_applicants', EmployerController::class . ':viewVacancyApplicants');
+    });
+
+    $app->group('/vacancies', function (App $app){
+        #view vacancies
+        $app->get('/all', EmployeeController::class . ':viewVacancies');
+
+        #view vacancy details
+        $app->get('/details/{vacancy_id}', EmployeeController::class . ':viewFullVacancy');
     });
 });

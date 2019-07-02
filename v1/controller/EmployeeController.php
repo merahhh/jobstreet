@@ -43,6 +43,11 @@ class EmployeeController
         return $randomString;
     }
 
+    public function generateUniqueApplicantID($len = 5){
+        $randomString = substr(MD5(time()), $len);
+        return $randomString;
+    }
+
     public function registerEmployee(Request $request, Response $response){
         $first_name = json_decode($request->getBody())->first_name;
         $last_name = json_decode($request->getBody())->last_name;
@@ -251,7 +256,108 @@ class EmployeeController
         }
         else {
             $message = "Please log in to edit your profile";
-            return $response->withJson($message, 400);
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function viewVacancies(Request $request, Response $response){
+        $sql_view_vacancies = "SELECT company_name, v_name, v_location, v_salary FROM vacancies";
+        $result = $this->db->query($sql_view_vacancies);
+
+        if ($result == true) {
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+                //echo json_encode($data);
+            }
+            return $response->withStatus(200);
+        }
+        else {
+            $data = "No jobs found";
+            return $response->withJson($data, 400);
+        }
+    }
+
+    public function viewFullVacancy(Request $request, Response $response, array $args){
+        $vacancy_id = $args['vacancy_id'];
+
+        $sql_vacancy_details = $this->db->prepare
+            ("SELECT company_name, v_name, v_desc, v_requirements, v_position, v_location, v_salary 
+                FROM vacancies WHERE vacancy_id = ?");
+        $result = $sql_vacancy_details->execute(array($vacancy_id));
+
+        if ($result == true) {
+            while ($row = $sql_vacancy_details->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+                echo json_encode($data);
+            }
+            return $response->withStatus(200);
+        }
+        else {
+            $data = "No data found for this job";
+            return $response->withJson($data, 400);
+        }
+    }
+
+    public function applyVacancy(Request $request, Response $response, array $args){
+        if ($this->session->get('logged_in') == true) {
+            $pitch = json_decode($request->getBody())->pitch;
+            $applicant_id = $this->generateUniqueApplicantID();
+            $vacancy_id = $args['vacancy_id'];
+            $employee_id = $this->session->get('id');
+            $date_submitted = date("F d, Y");
+
+            $sql_apply_vacancy = $this->db->prepare
+                ("INSERT INTO vacancy_applicants (application_id, vacancy_id, id, pitch, date_submitted) VALUES 
+                    (?, ?, ?, ?, ?)");
+            $result = $sql_apply_vacancy->execute(array($applicant_id, $vacancy_id, $employee_id, $pitch, $date_submitted));
+
+            if ($result == true){
+                $data = "Application sent! Please check your application status again soon and be alert 
+                    to avoid any missed contact attempts from the employer.";
+                return $response->withJson($data, 400);
+            }
+            else{
+                $data = "Application for job not sent!";
+                return $response->withJson($data, 500);
+            }
+        }
+        else {
+            $message = "Please log in to apply for this job";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function viewApplications(Request $request, Response $response, array $args){
+        if ($this->session->get('logged_in') == true) {
+            $employee_id = $this->session->get('id');
+            $sql_view_applications = $this->db->prepare
+                ("SELECT vacancy_id FROM vacancy_applicants WHERE id = ?");
+            $result = $sql_view_applications->execute(array($employee_id));
+            //$vacancy_id = $sql_view_applications->fetchAll(PDO::FETCH_COLUMN);
+
+            if ($result == true){
+                $sql_vacancy_info = $this->db->prepare
+                    ("SELECT vacancies.company_name, vacancies.v_name, vacancy_applicants.date_submitted, 
+                        vacancy_applicants.application_status FROM vacancy_applicants INNER JOIN vacancies 
+                        ON vacancy_applicants.vacancy_id = vacancies.vacancy_id WHERE vacancy_applicants.id = ?");
+                $result = $sql_vacancy_info->execute(array($employee_id));
+
+                if ($result == true) {
+                    while ($row = $sql_vacancy_info->fetchAll(PDO::FETCH_ASSOC)) {
+                        $data[] = $row;
+                        echo json_encode($data);
+                    }
+                    return $response->withStatus(200);
+                }
+                else {
+                    $data = "No applications found. Apply for a job now!";
+                    return $response->withJson($data, 400);
+                }
+            }
+        }
+        else {
+            $message = "Please log in to view your job applications";
+            return $response->withJson($message, 403);
         }
     }
 }
