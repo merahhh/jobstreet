@@ -341,7 +341,67 @@ class EmployerController
     public function viewVacancyApplicants(Request $request, Response $response, array $args){
         if ($this->session->get('logged_in') == true) {
             $vacancy_id = $args['vacancy_id'];
+            $sql_view_applicants = $this->db->prepare
+            ("SELECT employee.id, employee.first_name, employee.last_name, employee.email FROM employee INNER JOIN 
+                vacancy_applicants ON employee.id = vacancy_applicants.id WHERE vacancy_applicants.vacancy_id = ?");
+            $result = $sql_view_applicants->execute(array($vacancy_id));
 
+            if ($result == true){
+                while ($row = $sql_view_applicants->fetch(PDO::FETCH_ASSOC)) {
+                    $data[] = $row;
+                    echo json_encode($data);
+                }
+                return $response->withStatus(200);
+            }
+            else{
+                $data = "No applicants has applied for this vacancy";
+                return $response->withJson($data, 400);
+            }
+        }
+        else{
+            $message = "Please log in to view applicants for vacancies";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function viewApplicantDetails(Request $request, Response $response, array $args){
+        if ($this->session->get('logged_in') == true) {
+            $employee_id = $args['employee_id'];
+            $sql_applicant_details = $this->db->prepare
+            ("SELECT employee.id, employee.first_name, employee.last_name, employee.email, employee.contact
+                FROM employee WHERE id = ?");
+            $result = $sql_applicant_details->execute(array($employee_id));
+
+            while ($row = $sql_applicant_details->fetch(PDO::FETCH_ASSOC)) {
+                    $data[] = $row;
+                    //echo json_encode($data);
+            }
+
+            if ($result == true) {
+                $sql_applicants_profile = $this->db->prepare
+                ("SELECT employee_profile.id, employee_profile.experience, employee_profile.skills, employee_profile.language,
+                employee_profile.expected_salary, employee_profile.location, employee_profile.resume,
+                employee_education.institute, employee_education.graduation_time, employee_education.qualification,
+                employee_education.major, employee_education.grade FROM employee_profile
+                INNER JOIN employee_education ON employee_profile.education_id = employee_education.education_id
+                WHERE employee_profile.id = ?");
+                $result_profile = $sql_applicants_profile->execute(array($employee_id));
+
+                if ($result_profile == true) {
+                    while ($row = $sql_applicants_profile->fetch(PDO::FETCH_ASSOC)) {
+                        $data[] = $row;
+                        echo json_encode($data);
+                    }
+                    return $response->withStatus(200);
+                } else {
+                    $message = "Unable to get applicant profile & education";
+                    return $response->withJson($message, 500);
+                }
+            }
+            else{
+                $message = "Unable to get applicant info";
+                return $response->withJson($message, 500);
+            }
         }
         else{
             $message = "Please log in to view applicants for vacancies";

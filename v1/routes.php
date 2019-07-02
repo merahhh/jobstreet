@@ -58,6 +58,9 @@ $app->group('/v1', function (App $app) {
 
         #view vacancy applicants
         $app->get('/vacancy/{vacancy_id}/view_applicants', EmployerController::class . ':viewVacancyApplicants');
+
+        #view applicant details
+        $app->get('/vacancy/{vacancy_id}/applicants/{employee_id}', EmployerController::class . ':viewApplicantDetails');
     });
 
     $app->group('/vacancies', function (App $app){
