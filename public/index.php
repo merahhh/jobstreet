@@ -12,6 +12,9 @@ require_once dirname(__FILE__) . "/../v1/controller/EmployeeController.php";
 require_once dirname(__FILE__) . "/../v1/controller/EmployerController.php";
 require '../vendor/autoload.php';
 
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__);
+$twig = new \Twig\Environment($loader);
+
 $app = new Slim\App();
 $container = $app->getContainer();
 
@@ -44,8 +47,17 @@ $container['EmployerController'] = function ($container) {
     return $employer_controller;
 };
 
+try {
+    echo $twig->render("tpl/index.twig");
+    } catch (\Twig\Error\LoaderError $e) {
+    } catch (\Twig\Error\RuntimeError $e) {
+    } catch (\Twig\Error\SyntaxError $e) {
+    }
+
 require_once dirname(__FILE__) . "/../v1/routes.php";
 
 // Run app
-$app->run();
+//$app->run();
+
+
 

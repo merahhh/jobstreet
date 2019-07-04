@@ -1,10 +1,15 @@
 <?php
 use Slim\App;
 date_default_timezone_set('Asia/Kuala_Lumpur');
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__);
+$twig = new \Twig\Environment($loader);
 
 /*--------------------------------routes-------------------------------------*/
 
+$app->get('/', Home::class . ':index');
+
 $app->group('/v1', function (App $app) {
+
     $app->group('/employee', function (App $app){
         #register employee
         $app->post('/register', EmployeeController::class . ':registerEmployee');

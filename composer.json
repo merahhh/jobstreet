@@ -2,6 +2,7 @@
     "require": {
         "slim/slim": "^3.12",
         "ext-pdo": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "twig/twig": "^2.11"
     }
 }
