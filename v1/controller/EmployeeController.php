@@ -2,15 +2,23 @@
 error_reporting(E_ALL^E_NOTICE);
 use Slim\Http\Response as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Router;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class EmployeeController
 {
-    protected $employee, $session, $db;
+    protected $employee, $session, $db, $view, $router, $twig;
 
-    public function __construct($session, $employee){
+    public function __construct($session, $employee, $view, Router $router){
         $this->employee = $employee;
+        $this->view = $view;
         $this->session = $session;
         $this->db = $this->employee->getConn();
+        //$this->router = $router;
+        $loader = new FilesystemLoader(__DIR__ . '/../../public/tpl/employee');
+        $this->twig = new Environment($loader, ['debug' => true]);
+        $this->twig->addExtension(new \Twig\Extension\DebugExtension());
     }
 
     public function __get($name){
@@ -49,11 +57,12 @@ class EmployeeController
     }
 
     public function registerEmployee(Request $request, Response $response){
-        $first_name = json_decode($request->getBody())->first_name;
-        $last_name = json_decode($request->getBody())->last_name;
-        $email = json_decode($request->getBody())->email;
-        $contact = json_decode($request->getBody())->contact;
-        $password = json_decode($request->getBody())->password;
+        $user = $request->getParsedBody();
+        $first_name = $user['first_name'];
+        $last_name = $user['last_name'];
+        $email = $user['email'];
+        $contact = $user['contact_no'];
+        $password = $user['password'];
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false){
             $sql_get_info = $this->db->prepare("SELECT * FROM employee WHERE email = ?");
@@ -63,7 +72,8 @@ class EmployeeController
             #we know user email exists if the rows returned are > 0
             if ($result != null){
                 $message = "User with that email exists";
-                return $response->withJson($message, 501);
+                //return $response->withJson($message, 501);
+                return $response->withRedirect('/');
             }
             else {   #email doesn't already exist in DB, proceed
                 $password = password_hash($password, PASSWORD_BCRYPT);
@@ -89,21 +99,25 @@ class EmployeeController
                         if ($result_education == true){
                             $this->session->set('active', 1);
                             $message = "User account created successfully";
-                            return $response->withJson($message, 201);
+                            //return $response->withJson($message, 201);
+                            return $response->withRedirect('/');
                         }
                         else {
                             $message = "Profile education ID error";
-                            return $response->withJson($message, 400);
+                            //return $response->withJson($message, 400);
+                            return $response->withRedirect('/');
                         }
                     }
                     else {
                         $message = "Profile ID error";
-                        return $response->withJson($message, 400);
+                        //return $response->withJson($message, 400);
+                        return $response->withRedirect('/');
                     }
                 }
                 else{
                     $message = "User not registered";
-                    return $response->withJson($message, 500);
+                    //return $response->withJson($message, 500);
+                    return $response->withRedirect('');
                 }
             }
         }
@@ -115,15 +129,18 @@ class EmployeeController
 
     public function loginEmployee(Request $request, Response $response){
         try{
-            $email = json_decode($request->getBody())->email;
+            $allPostPutVars = $request->getParsedBody();
+            $email = $allPostPutVars['email'];
+            $password = $allPostPutVars['password'];
+            //$email = json_decode($request->getBody())->email;
             $user = $this->employee->getInfoAssoc($email);
 
             if ($user == null){
                 $data = 'Employee does not exist';
-                return $response->withJson($data, 404);
+                return $response->withRedirect('/');
             }
             else{
-                if (password_verify(json_decode($request->getBody())->password, $user['password'])){    #if password is correct
+                if (password_verify($password, $user['password'])){    #if password is correct
                     $this->session->set('id', $user['id']);
                     $this->session->set('email', $user['email']);
                     $this->session->set('first_name', $user['first_name']);
@@ -133,18 +150,24 @@ class EmployeeController
                     #this is how we'll know the user is logged in
                     $this->session->set('logged_in', true);
                     $data = 'Successfully logged in';
-                    return $response->withJson($data, 200);
+                    $response->withRedirect('/v1/home');
+                    //return $response->withJson($data, 200);
+                    //return $this->view->render($response, 'home.twig');
+                    //return $this->view->render($response,
+                    //    'home.twig', ['name' => $this->session->get('first_name')]);
+                    return $response->withRedirect('/');
 
                 }
                 else{    #if password is incorrect
                     $data = 'Incorrect password';
-                    return $response->withJson($data, 500);
+                    //return $this->view->render($response, 'home.twig');
+                    return $response->withRedirect('/');
                 }
             }
         }
         catch (exception $e){
             $data = 'Oops, something went wrong!';
-            return $response->withJson($data, 300);
+            return $response->withRedirect('/');
         }
     }
 
@@ -172,7 +195,8 @@ class EmployeeController
             $this->session->set('logged_in', false);
             //$this->session->destroySession();
             $message = 'Successfully logged out!';
-            return $response->withJson($message, 200);
+            //return $response->withJson($message, 200);
+            return $response->withRedirect('/');
 
         } catch (exception $e){
             $data = 'Oops, something went wrong!';
@@ -183,7 +207,12 @@ class EmployeeController
     public function viewProfileEmployee(Request $request, Response $response){
         if ($this->session->get('logged_in') == true) {
             $sql_get_profile = $this->db->prepare
-                ("SELECT experience, skills, language, expected_salary, location FROM employee_profile WHERE id = ?");
+                ("SELECT employee_profile.gender, employee_profile.age, employee_profile.nationality, 
+                employee_profile.experience, employee_profile.skills, employee_profile.language,
+                employee_profile.expected_salary, employee_profile.location, employee_education.institute, 
+                employee_education.graduation_time, employee_education.qualification, employee_education.major,
+                employee_education.grade FROM employee_profile INNER JOIN employee_education ON 
+                employee_profile.education_id = employee_education.education_id WHERE employee_profile.id = ?");
             $result = $sql_get_profile->execute(array($this->session->get('id')));
             //$result = $this->db->query($sql_get_profile);
 
@@ -191,8 +220,15 @@ class EmployeeController
                 while ($row = $sql_get_profile->fetch(PDO::FETCH_ASSOC)) {
                     $data[] = $row;
                     //echo json_encode($data);
+                    $this->session->set('employee_profile', $data);
                 }
-                return $response->withStatus(200);
+                try {
+                    echo $this->twig->render("profile.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile') ]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
             else {
                 $data = "No data found, edit profile now";
@@ -207,6 +243,9 @@ class EmployeeController
 
     public function editProfileEmployee(Request $request, Response $response){
         if ($this->session->get('logged_in') == true) {
+            $gender = json_decode($request->getBody())->gender;
+            $age = json_decode($request->getBody())->age;
+            $nationality = json_decode($request->getBody())->nationality;
             $experience = json_decode($request->getBody())->experience;
             $skills = json_decode($request->getBody())->skills;
             $language = json_decode($request->getBody())->language;
@@ -225,10 +264,10 @@ class EmployeeController
 
             #update employee_profile table
             $sql_edit_profile = $this->db->prepare
-                ("UPDATE employee_profile SET experience = ?, skills = ?, language = ?, expected_salary = ?, 
-                location = ?, resume = ? WHERE id = ?");
+                ("UPDATE employee_profile SET gender = ?, age = ?, nationality = ?, experience = ?, skills = ?, 
+                language = ?, expected_salary = ?, location = ?, resume = ? WHERE id = ?");
             $result = $sql_edit_profile->execute
-                ([$experience, $skills, $language, $expected_salary, $location, $resume, $id]);
+                ([$gender, $age, $nationality, $experience, $skills, $language, $expected_salary, $location, $resume, $id]);
 
             #if insert into employee_profile successful
             if ($result == true){
@@ -288,7 +327,7 @@ class EmployeeController
         if ($result == true) {
             while ($row = $sql_vacancy_details->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
-                echo json_encode($data);
+                //echo json_encode($data);
             }
             return $response->withStatus(200);
         }
@@ -329,6 +368,7 @@ class EmployeeController
 
     public function viewApplications(Request $request, Response $response, array $args){
         if ($this->session->get('logged_in') == true) {
+            $count = 0;
             $employee_id = $this->session->get('id');
             $sql_view_applications = $this->db->prepare
                 ("SELECT vacancy_id FROM vacancy_applicants WHERE id = ?");
@@ -343,11 +383,24 @@ class EmployeeController
                 $result = $sql_vacancy_info->execute(array($employee_id));
 
                 if ($result == true) {
-                    while ($row = $sql_vacancy_info->fetchAll(PDO::FETCH_ASSOC)) {
-                        $data[] = $row;
-                        echo json_encode($data);
+                    while ($row = $sql_vacancy_info->fetch(PDO::FETCH_ASSOC)) {
+                        $applications[] = $row;
+                        $count++;
+                        $this->session->set('applications', $applications);
                     }
-                    return $response->withStatus(200);
+                    $this->session->set('count', $count);
+                    //return $response->withJson($applications, 200);
+                    return $response->withRedirect('/v1/employee/applications');
+//                    try {
+//                        echo $this->twig->render("applications.twig", ['name' => $this->session->get('first_name'),
+//                            'last_name' => $this->session->get('last_name'), 'applications' => $this->session->get('applications') ]);
+//                    } catch (\Twig\Error\LoaderError $e) {
+//                        echo "error";
+//                    } catch (\Twig\Error\RuntimeError $e) {
+//                        echo "error2";
+//                    } catch (\Twig\Error\SyntaxError $e) {
+//                        echo "error3";
+//                    }
                 }
                 else {
                     $data = "No applications found. Apply for a job now!";

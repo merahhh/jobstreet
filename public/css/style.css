@@ -17,7 +17,6 @@ body {
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased;
 }
-
 h1,
 h2,
 h3,
@@ -63,6 +62,10 @@ img {
 	max-width: 100%;
 }
 
+span.tab-space {
+	padding-left:5em;
+}
+
 input:focus,
 select:focus,
 button:focus,
@@ -70,9 +73,14 @@ textarea:focus {
 	outline: none;
 }
 
-a:hover,
+a {
+	text-decoration: none !important;
+}
+a:hover {
+	text-decoration: none !important;
+}
 a:focus {
-	text-decoration: none;
+	text-decoration: none !important;
 	outline: none;
 }
 
@@ -392,11 +400,11 @@ ol {
 ---------------------*/
 
 .header-section {
-	position: absolute;
+	position: inherit;
 	width: 100%;
 	left: 0;
 	z-index: 99;
-	top: 0px;
+	top: 0;
 }
 
 .header-warp {
@@ -409,10 +417,14 @@ ol {
 .user-panel {
 	float: right;
 	color: #fff;
-	font-weight: 600;
+	font-weight: 400;
 	font-size: 16px;
-	margin-left: 120px;
-	padding: 10px 0;
+	margin-left: 10px;
+	padding-right: 80px;
+}
+
+.user-panel button {
+
 }
 
 .user-panel a {
@@ -437,8 +449,9 @@ ol {
 }
 
 .main-menu {
-	float: right;
-	padding-left: 100px;
+	float: start;
+	padding-left: 70px;
+	margin-right: 20px;
 	list-style: none;
 }
 
@@ -449,8 +462,8 @@ ol {
 .main-menu li a {
 	display: inline-block;
 	color: #fff;
-	font-weight: 600;
-	font-size: 16px;
+	font-weight: 500;
+	font-size: 14px;
 	margin-left: 35px;
 	padding: 10px 0;
 }
@@ -464,7 +477,12 @@ ol {
 ---------------------*/
 
 .hero-section {
-	height: 650px;
+	height: max-content;
+	padding-bottom: 50px;
+}
+
+.bg-color {
+	background-color: #e5e5e5;
 }
 
 .bg-overlay,
@@ -486,8 +504,7 @@ ol {
 }
 
 .hero-text {
-	padding-top: 230px;
-	padding-right: 50px;
+	padding-top: 100px;
 }
 
 .hero-text h2 {
@@ -496,7 +513,7 @@ ol {
 }
 
 .hero-text p {
-	font-size: 16px;
+	font-size: 15px;
 	font-weight: 600;
 	line-height: 2;
 	margin-bottom: 20px;
@@ -530,17 +547,18 @@ ol {
 ---------------------*/
 
 .multi-search-section {
-	position: relative;
+	position: center;
 	margin-top: -70px;
 }
 
 .msf-warp {
-	width: 1240px;
-	margin: 0 auto;
-	overflow: overlay;
+	alignment: inherit;
+	overflow: hidden;
 	background: #1d1d1d;
 	padding-top: 40px;
+	padding-left: 40px;
 	padding-bottom: 35px;
+    margin-top: 70px;
 }
 
 .msf-warp h5 {
@@ -865,7 +883,8 @@ ol {
   Fact section
 ---------------------*/
 .fact-section {
-	padding-left: 23%;
+	padding-left: 10%;
+	padding-right: 10%;
 }
 
 .fact-item figure {
@@ -962,8 +981,8 @@ ol {
 .footer-menu li a {
 	display: inline-block;
 	color: #fff;
-	font-weight: 600;
-	font-size: 16px;
+	font-weight: 400;
+	font-size: 15px;
 	margin-left: 35px;
 	padding: 10px 0;
 }
@@ -973,8 +992,8 @@ ol {
 }
 
 .footer-bottom {
-	padding-top: 40px;
-	padding-bottom: 38px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	border-top: 1px solid #5b5b5b;
 	overflow: hidden;
 	margin: 0;
@@ -1615,6 +1634,10 @@ ol {
 	.user-panel {
 		margin-left: 20px;
 	}
+    .user-panel button {
+        font-size: 16px;
+        margin-left: 35px;
+    }
 	.nav-switch {
 		position: absolute;
 		display: block;

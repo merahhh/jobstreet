@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jobstreet.io | This is an index test page</title>
+    <meta name="description" content="This is a test project developed to enhance my web development skills. This is
+        influenced by Jobstreet.com which is the no. 1 recruitment site in Malaysia with over 29,000 vacancies to find
+        your next career opportunity.">
+    <!-- Stylesheets -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <!--<link rel="stylesheet" href="../css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
+</head>
+
+<body>
+<header class="header-section">
+    <div class="header-warp">
+        <div class="container d-flex">
+            <div class="d-flex flex-row">
+                <div class="main-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <div class="user-panel float-right">
+                        <button id="header-login-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                data-target="#login-panel">Login</button>
+                        <span>/</span>
+                        <button id="header-register-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                data-target="#register-panel">Register</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="hero-section set-bg bg-overlay" style="background-image: url('../../img/bb.jpg');
+background-position: 100%">
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-6 align-content-start hero-text text-white text-justify">
+                <div class="row align-self-start">
+                    <h5 style="padding-top: 100px; padding-right: 40px; line-height: 2; color: #f7f7f7;">
+                        <i>This is a test project developed to enhance my web development skills. This is
+                        influenced by Jobstreet.com which is the no. 1 recruitment site in Malaysia with over 29,000
+                            vacancies to find your next career opportunity.</i>
+                    </h5>
+                </div>
+            </div>
+            <div class="col col-md-6 align-content-end hero-text text-white text-justify">
+                <p>
+                    Founded in Malaysia in 1997, JobStreet.com now has a team of 800 talented individuals,
+                    giving us a strong local presence in every country in which we operate.
+                    With our understanding and insights on each market, as well our passion for technology,
+                    we provide jobseekers the best opportunities and deliver exceptional value to employers.
+                    In November 2014, we became part of the Australian Stock Exchange-listed SEEK Limited –
+                    the world’s largest online employment marketplace by market capitalisation.
+                </p>
+
+
+                <p class="">
+                    As part of the SEEK family,
+                    we leverage world-class products to match talented job seekers with reputable employers across
+                    the region.
+                    We are committed to continuously improving the value we provide to jobseekers and employers.
+                    To deliver on this, we continue to evolve our product and service offerings to better facilitate
+                    the matching of job-seekers to employers.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Login Modal -->
+<div class="modal fade" id="login-panel" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header d-flex align-content-around">
+                <h4 class="p-2 modal-title">Login</h4>
+                <!--<button type="button" class="ml-5 close" data-dismiss="modal">&times;</button>-->
+            </div>
+            <div class="modal-body">
+                <form class="login-form" action="/v1/employee/login" method="post">
+                    <label for="email">
+                        <input type="email" class="input" name="email" id="email" autocomplete="off"
+                               placeholder="Email" required>
+                    </label>
+                    <label for="password">
+                        <input type="password" class="input" name="password" id="password" autocomplete="off"
+                               placeholder="Password" required>
+                    </label>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name="login">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="container">
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="register-panel" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header d-flex align-content-around">
+                    <h4 class="p-2 modal-title">Register</h4>
+                    <!--<button type="button" class="ml-5 close" data-dismiss="modal">&times;</button>-->
+                </div>
+                <div class="modal-body">
+                    <form class="register-form" action="/v1/employee/register" method="post">
+                        <label for="first_name">
+                            <input type="text" class="input" name="first_name" id="first_name" autocomplete="off"
+                                   placeholder="First Name" required>
+                        </label>
+                        <label for="last_name">
+                            <input type="text" class="input" name="last_name" id="last_name" autocomplete="off"
+                                   placeholder="Last Name" required>
+                        </label>
+                        <label for="email">
+                            <input type="email" class="input" name="email" id="email" autocomplete="off"
+                                   placeholder="Email" required>
+                        </label>
+                        <label for="contact_no">
+                            <input type="text" class="input" name="contact_no" id="contact_no" autocomplete="off"
+                                   placeholder="Phone Number" required>
+                        </label>
+                        <label for="password">
+                            <input type="password" class="input" name="password" id="password" autocomplete="off"
+                                   placeholder="Password" required>
+                        </label>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="login">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer-section">
+    <div class="container">
+        <div class="footer-bottom align-items-center">
+            <ul class="footer-menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Getting Started</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Send Feedback</a></li>
+                <li><a href="#">Work With Us</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p class="text-white text-center">
+                Copyright © 2019 All Rights Reserved
+            </p>
+        </div>
+    </div>
+</footer>
+
+
+</body>
+</html>

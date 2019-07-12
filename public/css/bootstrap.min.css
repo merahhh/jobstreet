@@ -2874,12 +2874,12 @@ fieldset:disabled a.btn {
  box-shadow:0 0 0 .2rem rgba(52,58,64,.5)
 }
 .btn-link {
- font-weight:400;
- color:#007bff;
+ font-weight:600;
+ color: #ffffff;
  background-color:transparent
 }
 .btn-link:hover {
- color:#0056b3;
+ color:#3f68e4;
  text-decoration:underline;
  background-color:transparent;
  border-color:transparent
@@ -2921,7 +2921,7 @@ input[type=submit].btn-block {
  width:100%
 }
 .fade {
- opacity:0;
+ opacity:1;
  transition:opacity .15s linear
 }
 .fade.show {
@@ -4090,7 +4090,7 @@ tbody.collapse.show {
  color:#fff
 }
 .card {
- position:relative;
+ position:absolute;
  display:-webkit-box;
  display:-ms-flexbox;
  display:flex;
@@ -4143,7 +4143,8 @@ tbody.collapse.show {
  padding:.75rem 1.25rem;
  margin-bottom:0;
  background-color:rgba(0,0,0,.03);
- border-bottom:1px solid rgba(0,0,0,.125)
+ border-bottom:1px solid rgba(0,0,0,.125);
+ font-size: 20px;
 }
 .card-header:first-child {
  border-radius:calc(.25rem - 1px) calc(.25rem - 1px) 0 0
@@ -4933,14 +4934,15 @@ button.close {
 }
 .modal {
  position:fixed;
- top:0;
+ top:25%;
  right:0;
  bottom:0;
  left:0;
  z-index:1050;
  display:none;
  overflow:hidden;
- outline:0
+ outline:0;
+ opacity: 1;
 }
 .modal-open .modal {
  overflow-x:hidden;
@@ -4957,7 +4959,8 @@ button.close {
  transition:transform .3s ease-out;
  transition:transform .3s ease-out,-webkit-transform .3s ease-out;
  -webkit-transform:translate(0,-25%);
- transform:translate(0,-25%)
+ transform:translate(0,0%);
+ align-items: center;
 }
 .modal.show .modal-dialog {
  -webkit-transform:translate(0,0);
@@ -4999,7 +5002,7 @@ button.close {
  background-color:#000
 }
 .modal-backdrop.fade {
- opacity:0
+ opacity:.5
 }
 .modal-backdrop.show {
  opacity:.5

@@ -1,13 +1,14 @@
 <?php
-error_reporting(E_ALL);
 ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Router;
 use utility\Session;
 require_once dirname(__FILE__) . "/../v1/model/Employee.php";
 require_once dirname(__FILE__) . "/../v1/model/Employer.php";
 require_once dirname(__FILE__) . "/../v1/library/Session.php";
+require_once dirname(__FILE__) . "/../v1/controller/Home.php";
 require_once dirname(__FILE__) . "/../v1/controller/EmployeeController.php";
 require_once dirname(__FILE__) . "/../v1/controller/EmployerController.php";
 require '../vendor/autoload.php';
@@ -15,7 +16,8 @@ require '../vendor/autoload.php';
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__);
 $twig = new \Twig\Environment($loader);
 
-$app = new Slim\App();
+$app = new Slim\App(['settings' => ['displayErrorDetails' => true]]);
+
 $container = $app->getContainer();
 
 $container['Session'] = function () {
@@ -33,10 +35,19 @@ $container['Employer'] = function () {
     return $employer;
 };
 
+$container['Home'] = function ($container) {
+    $session = $container->get('Session');
+    $view = $container->get('View');
+    $home = new Home($view, $session);
+    return $home;
+};
+
 $container['EmployeeController'] = function ($container) {
     $session = $container->get('Session');
     $employee = $container->get('Employee');
-    $employee_controller = new EmployeeController($session, $employee);
+    $view = $container->get('View');
+    $router = new Router();
+    $employee_controller = new EmployeeController($session, $employee, $view, $router);
     return $employee_controller;
 };
 
@@ -47,17 +58,25 @@ $container['EmployerController'] = function ($container) {
     return $employer_controller;
 };
 
-try {
-    echo $twig->render("tpl/index.twig");
-    } catch (\Twig\Error\LoaderError $e) {
-    } catch (\Twig\Error\RuntimeError $e) {
-    } catch (\Twig\Error\SyntaxError $e) {
-    }
+$container['View'] = function ($container) {
+    $templatesPath = __DIR__.'/tpl';
+    $view = new \Slim\Views\Twig($templatesPath, [
+        'cache' => false
+    ]);
+
+    // Instantiate and add Slim specific extension
+    $router = $container->get('router');
+    $uri = \Slim\Http\Uri::createFromEnvironment(new \Slim\Http\Environment($_SERVER));
+    $view->addExtension(new \Slim\Views\TwigExtension($router, $uri));
+
+    return $view;
+};
 
 require_once dirname(__FILE__) . "/../v1/routes.php";
+//echo $app->getContainer()->get('router')->pathFor('login.employee');
 
 // Run app
-//$app->run();
+$app->run();
 
 
 

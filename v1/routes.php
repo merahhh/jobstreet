@@ -8,6 +8,8 @@ $twig = new \Twig\Environment($loader);
 
 $app->get('/', Home::class . ':index');
 
+$app->get('/about', Home::class . ':about');
+
 $app->group('/v1', function (App $app) {
 
     $app->group('/employee', function (App $app){
@@ -28,6 +30,7 @@ $app->group('/v1', function (App $app) {
 
         #view job applications
         $app->get('/profile/vacancies_applied', EmployeeController::class . ':viewApplications');
+        $app->get('/applications', Home::class . ':applications');
 
         #logout employee
         $app->post('/logout', EmployeeController::class . ':logoutEmployee');
@@ -43,7 +46,7 @@ $app->group('/v1', function (App $app) {
         #logout employer
         $app->post('/logout', EmployerController::class . ':logoutEmployer');
 
-        #view profile employee
+        #view profile employer
         $app->get('/profile', EmployerController::class . ':viewProfileEmployer');
 
         #edit profile employer
@@ -76,3 +79,6 @@ $app->group('/v1', function (App $app) {
         $app->get('/details/{vacancy_id}', EmployeeController::class . ':viewFullVacancy');
     });
 });
+
+
+

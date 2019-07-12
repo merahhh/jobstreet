@@ -1,0 +1,57 @@
+{% extends "base.twig" %}
+
+{% block title %}Jobstreet | About Us{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+<section class="hero-section set-bg bg-overlay" style="background-image: url('../../img/klcc.jpg');">
+    <div class="container">
+        <div class="row">
+                <div class="hero-text">
+                    <section class="multi-search-section">
+                            <div class="msf-warp">
+                                <h5>Search for opportunities</h5>
+                                <form class="multi-search-form">
+                                    <input type="text" placeholder="Job Keywords">
+                                    <input type="text" placeholder="Location">
+                                    <input type="text" placeholder="Min. Salary">
+                                    <button class="site-btn">Search</button>
+                                </form>
+                            </div>
+                    </section>
+                </div>
+        </div>
+    </div>
+</section>
+
+<section class="fact-section spad">
+    <div class="container align-items-center">
+        <div class="row">
+            <div class="col-md-4 align-self-start fact-item" style="padding-left: 8%;">
+                <figure class="align-self-center">
+                    <img src="../../img/icons/4.png" alt>
+                    <h2>2500</h2>
+                    <p>Job Opportunities</p>
+                </figure>
+            </div>
+            <div class="col-md-4 align-self-center fact-item" style="padding-left: 8%;">
+                <figure class="align-self-center">
+                    <img src="../../img/icons/1.png" alt>
+                    <h2>500</h2>
+                    <p>Top Employers</p>
+                </figure>
+            </div>
+            <div class="col-md-4 align-self-end fact-item" style="padding-left: 8%;">
+                <figure class="align-self-center">
+                    <img src="../../img/icons/2.png" alt>
+                    <h2>700</h2>
+                    <p>Fresh Grad Openings</p>
+                </figure>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

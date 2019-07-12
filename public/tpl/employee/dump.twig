@@ -1,0 +1,17 @@
+{% extends "base.twig" %}
+
+{% block title %}Jobstreet | About Us{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+
+    {% for i in range(0, count-1) %}
+        {{ dump(applications[i]) }}
+    {% endfor %}
+
+{% endblock %}
+
+

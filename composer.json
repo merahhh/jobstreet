@@ -3,6 +3,8 @@
         "slim/slim": "^3.12",
         "ext-pdo": "*",
         "ext-json": "*",
-        "twig/twig": "^2.11"
+        "twig/twig": "^2.11",
+        "twbs/bootstrap": "^4.3",
+        "slim/twig-view": "^2.5"
     }
 }
