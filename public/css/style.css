@@ -1022,6 +1022,49 @@ ol {
 	text-align: center;
 }
 
+.search-card {
+}
+
+.icon {
+	padding: 5px;
+}
+
+.job-salary {
+	overflow: hidden;
+	color: #666666;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 13px;
+}
+
+.job-location {
+    overflow: hidden;
+    color: #666666;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.link-title-color a{
+	color: #1c3f94!important;
+}
+.link-title-color a:hover{
+	text-decoration: underline;
+	color: #081534 !important;
+}
+
+.crop-text-2 {
+    -webkit-line-clamp: 2;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.profile-picture {
+
+}
+
 /*------------------
   About section
 ---------------------*/

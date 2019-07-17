@@ -300,15 +300,24 @@ class EmployeeController
     }
 
     public function viewVacancies(Request $request, Response $response){
-        $sql_view_vacancies = "SELECT company_name, v_name, v_location, v_salary FROM vacancies";
+        $sql_view_vacancies = "SELECT company_name, v_name, v_location, v_salary, v_desc, v_closing_date FROM vacancies";
         $result = $this->db->query($sql_view_vacancies);
+        $count = 0;
 
         if ($result == true) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                $data[] = $row;
-                //echo json_encode($data);
+                $vacancies[] = $row;
+                $count++;
+                //$this->session->set('vacancies', $vacancies);
             }
-            return $response->withStatus(200);
+            //$this->session->set('count', $count);
+            try {
+                echo $this->twig->render("vacancies.twig", ['name' => $this->session->get('first_name'),
+                    'last_name' => $this->session->get('last_name'), 'vacancies' => $vacancies, 'count' => $count]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
         else {
             $data = "No jobs found";

@@ -8097,6 +8097,9 @@ button.bg-dark:hover {
 .font-italic {
  font-style:italic!important
 }
+.text-offwhite{
+ color:#e5e5e5!important
+}
 .text-white {
  color:#fff!important
 }

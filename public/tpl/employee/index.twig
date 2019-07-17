@@ -1,44 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Jobstreet.io | This is an index test page</title>
-    <meta name="description" content="This is a test project developed to enhance my web development skills. This is
-        influenced by Jobstreet.com which is the no. 1 recruitment site in Malaysia with over 29,000 vacancies to find
-        your next career opportunity.">
-    <!-- Stylesheets -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-    <!--<link rel="stylesheet" href="../css/bootstrap.min.css">-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/style.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+{% extends "base.twig" %}
 
-    <!-- Google font -->
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
-</head>
+{% block title %}Jobstreet.io | This is an index test page{% endblock %}
 
-<body>
-    <header class="header-section">
-        <div class="header-warp">
-            <div class="container d-flex">
-                <div class="d-flex flex-row">
-                    <div class="main-menu">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/about">About Us</a></li>
-                        <div class="user-panel float-right">
-                            <button id="header-login-btn" class="btn btn-link" type="submit" data-toggle="modal"
-                                    data-target="#login-panel">Login</button>
-                            <span>/</span>
-                            <button id="header-register-btn" class="btn btn-link" type="submit" data-toggle="modal"
-                                    data-target="#register-panel">Register</button>
-                        </div>
-                    </div>
+{% block head %}
+    {{ parent() }}
+{% endblock %}
 
+{% block header %}
+<header class="header-section">
+    <div class="header-warp">
+        <div class="container">
+            <div class="row">
+                <div class="main-menu col align-self-start">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/v1/vacancies/all">Search Jobs</a></li>
+                </div>
+                <div class="user-panel col align-self-end text-right">
+                    <button id="header-login-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                            data-target="#login-panel">Login</button>
+                    <span>/</span>
+                    <button id="header-register-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                            data-target="#register-panel">Register</button>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
+{% endblock %}
+
+{% block section %}
     <section class="hero-section set-bg bg-overlay" style="background-image: url('../../img/klcc.jpg');">
         <div class="container">
             <div class="row">
@@ -68,29 +59,29 @@
         </div>
     </section>
     <section class="fact-section spad">
-            <div class="row">
-                <div class="col-md-4 fact-item" style="padding-left: 8%;">
-                    <figure>
-                        <img src="../../img/icons/4.png" alt>
-                        <h2>2500</h2>
-                        <p>Job Opportunities</p>
-                    </figure>
-                </div>
-                <div class="col-md-4 fact-item" style="padding-left: 8%;">
-                    <figure>
-                        <img src="../../img/icons/1.png" alt>
-                        <h2>500</h2>
-                        <p>Top Employers</p>
-                    </figure>
-                </div>
-                <div class="col-md-4 fact-item" style="padding-left: 8%;">
-                    <figure>
-                        <img src="../../img/icons/2.png" alt>
-                        <h2>700</h2>
-                        <p>Fresh Grad Openings</p>
-                    </figure>
-                </div>
+        <div class="row">
+            <div class="col-md-4 fact-item" style="padding-left: 8%;">
+                <figure>
+                    <img src="../../img/icons/4.png" alt>
+                    <h2>2500</h2>
+                    <p>Job Opportunities</p>
+                </figure>
             </div>
+            <div class="col-md-4 fact-item" style="padding-left: 8%;">
+                <figure>
+                    <img src="../../img/icons/1.png" alt>
+                    <h2>500</h2>
+                    <p>Top Employers</p>
+                </figure>
+            </div>
+            <div class="col-md-4 fact-item" style="padding-left: 8%;">
+                <figure>
+                    <img src="../../img/icons/2.png" alt>
+                    <h2>700</h2>
+                    <p>Fresh Grad Openings</p>
+                </figure>
+            </div>
+        </div>
     </section>
     <div class="container">
 
@@ -100,20 +91,29 @@
 
                 <!-- Modal content-->
                 <div class="modal-content">
-                    <div class="modal-header d-flex align-content-around">
-                        <h4 class="p-2 modal-title">Login</h4>
-                        <!--<button type="button" class="ml-5 close" data-dismiss="modal">&times;</button>-->
+                    <div class="modal-header">
+                        <div class="row">
+                            <div class="col align-self-start">
+                                <h4 class="modal-title">Login</h4>
+                            </div>
+                            <div class="col position-absolute">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                        </div>
                     </div>
                     <div class="modal-body">
                         <form class="login-form" action="/v1/employee/login" method="post">
-                            <label for="email">
-                                <input type="email" class="input" name="email" id="email" autocomplete="off"
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" name="email" id="email" autocomplete="off"
                                        placeholder="Email" required>
-                            </label>
-                            <label for="password">
-                                <input type="password" class="input" name="password" id="password" autocomplete="off"
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control" name="password" id="password" autocomplete="off"
                                        placeholder="Password" required>
-                            </label>
+                            </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary" name="login">Login</button>
@@ -133,31 +133,45 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header d-flex align-content-around">
-                        <h4 class="p-2 modal-title">Register</h4>
-                        <!--<button type="button" class="ml-5 close" data-dismiss="modal">&times;</button>-->
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="p-2 modal-title">Register</h4>
+                            </div>
+                            <div class="col position-absolute">
+                                <button type="button" class="ml-5 close" data-dismiss="modal">&times;</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-body">
                         <form class="register-form" action="/v1/employee/register" method="post">
-                            <label for="first_name">
-                                <input type="text" class="input" name="first_name" id="first_name" autocomplete="off"
-                                       placeholder="First Name" required>
-                            </label>
-                            <label for="last_name">
-                                <input type="text" class="input" name="last_name" id="last_name" autocomplete="off"
-                                       placeholder="Last Name" required>
-                            </label>
-                            <label for="email">
-                                <input type="email" class="input" name="email" id="email" autocomplete="off"
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="first_name">First Name:</label>
+                                    <input type="text" class="form-control form-control-sm" name="first_name" id="first_name" autocomplete="off"
+                                           placeholder="First Name" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="last_name">Last Name:</label>
+                                    <input type="text" class="form-control form-control-sm" name="last_name" id="last_name" autocomplete="off"
+                                           placeholder="Last Name" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control form-control-sm" name="email" id="email" autocomplete="off"
                                        placeholder="Email" required>
-                            </label>
-                            <label for="contact_no">
-                                <input type="text" class="input" name="contact_no" id="contact_no" autocomplete="off"
+                            </div>
+                            <div class="form-group">
+                                <label for="contact_no">Contact No:</label>
+                                <input type="text" class="form-control form-control-sm" name="contact_no" id="contact_no" autocomplete="off"
                                        placeholder="Phone Number" required>
-                            </label>
-                            <label for="password">
-                                <input type="password" class="input" name="password" id="password" autocomplete="off"
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control form-control-sm" name="password" id="password" autocomplete="off"
                                        placeholder="Password" required>
-                            </label>
+                            </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary" name="login">Register</button>
@@ -168,30 +182,4 @@
             </div>
         </div>
     </div>
-    <footer class="footer-section">
-        <div class="container">
-            <div class="footer-bottom align-items-center">
-                <ul class="footer-menu">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Getting Started</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">Send Feedback</a></li>
-                    <li><a href="#">Work With Us</a></li>
-                    <li><a href="#">Help</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <p class="text-white text-center">
-                    Copyright © 2019 All Rights Reserved
-                </p>
-            </div>
-        </div>
-    </footer>
-
-
-</body>
-</html>
+{% endblock %}

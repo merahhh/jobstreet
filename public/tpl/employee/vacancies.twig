@@ -1,0 +1,64 @@
+{% extends "base.twig" %}
+
+{% block title %}Jobs in Malaysia | Jobstreet{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+<section class="hero-section bg-color" style="padding-top: 40px">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card search-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Search Criteria</h5>
+                        <form class="search-card" action="" method="post">
+                            <div class="form-group">
+                                <input type="text" id="card-job-keyword" class="form-control" placeholder="Job Keywords">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="card-job-location" class="form-control" placeholder="Location">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="card-job-min-salary" class="form-control" placeholder="Min. Salary (MYR)">
+                            </div>
+                            <button class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="card">
+                    {% for i in range(0, count-1) %}
+                        <div class="card-body">
+                            <h5 class="link-title-color" style="margin-bottom: 10px">
+                                <a href class="card-title">
+                                    {{ vacancies[i].v_name }}
+                                </a>
+                            </h5>
+                            <h6><a href="#" class="card-subtitle mb-2 card-link">{{ vacancies[i].company_name }}</a></h6>
+                            <ul id="job_desc_summary" class="list-unstyled" style="margin-top: 5px;">
+                                <li id="job_salary" class="job-salary">
+                                    <i class="icon fas fa-dollar-sign"></i>
+                                    <span>{{ vacancies[i].v_salary }}</span>
+                                </li>
+                                <li id="job_location" class="job-location">
+                                    <i class="icon fas fa-location-arrow"></i>
+                                    <span>{{ vacancies[i].v_location }}</span>
+                                </li>
+                            </ul>
+                            <p class="card-text crop-text-2">{{ vacancies[i].v_desc }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <i class="icon fas fa-angle-up"></i>
+                            <small class="text-muted">Closing date: {{ vacancies[i].v_closing_date }}</small>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
