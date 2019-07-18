@@ -1029,22 +1029,6 @@ ol {
 	padding: 5px;
 }
 
-.job-salary {
-	overflow: hidden;
-	color: #666666;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	font-size: 13px;
-}
-
-.job-location {
-    overflow: hidden;
-    color: #666666;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-}
-
 .link-title-color a{
 	color: #1c3f94!important;
 }
@@ -1061,8 +1045,76 @@ ol {
     -webkit-box-orient: vertical;
 }
 
+.crop-text-15 {
+    -webkit-line-clamp: 15;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
 .profile-picture {
 
+}
+
+/*------------------
+  Vacancy Details
+---------------------*/
+
+.vacancy-details-main-card {
+}
+
+.title {
+    color: #949494;
+    font-size: 18px;
+    margin: 10px 0;
+    font-weight: 300;
+}
+
+.vacancy-details-body {
+    color: #1b1e21;
+}
+
+.vacancy-details-small {
+    font-size: 13.5px;
+    padding-bottom: 10px;
+}
+
+.vacancy_summary li {
+    padding-bottom: 5px;
+}
+
+.text-light-weight {
+    font-weight: 300
+}
+
+.col-separation {
+    margin-top: 5px!important;
+    margin-bottom: 5px!important;
+}
+
+.job-salary {
+    overflow: hidden;
+    color: #666666;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.job-location {
+    overflow: hidden;
+    color: #666666;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.job-position {
+    overflow: hidden;
+    color: #666666;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
 }
 
 /*------------------

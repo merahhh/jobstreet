@@ -74,9 +74,10 @@ $app->group('/v1', function (App $app) {
     $app->group('/vacancies', function (App $app){
         #view vacancies
         $app->get('/all', EmployeeController::class . ':viewVacancies');
+        #$app->get('/view/all', Home::class . ':viewVacancies');
 
         #view vacancy details
-        $app->get('/details/{vacancy_id}', EmployeeController::class . ':viewFullVacancy');
+        $app->get('/{vacancy_id}', EmployeeController::class . ':viewFullVacancy');
     });
 });
 

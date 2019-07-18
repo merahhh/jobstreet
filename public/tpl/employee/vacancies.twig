@@ -34,7 +34,7 @@
                     {% for i in range(0, count-1) %}
                         <div class="card-body">
                             <h5 class="link-title-color" style="margin-bottom: 10px">
-                                <a href class="card-title">
+                                <a href="/v1/vacancies/{{ vacancies[i].vacancy_id }}" class="card-title">
                                     {{ vacancies[i].v_name }}
                                 </a>
                             </h5>
@@ -46,7 +46,7 @@
                                 </li>
                                 <li id="job_location" class="job-location">
                                     <i class="icon fas fa-location-arrow"></i>
-                                    <span>{{ vacancies[i].v_location }}</span>
+                                    <span>{{ vacancies[i].v_state }}</span>
                                 </li>
                             </ul>
                             <p class="card-text crop-text-2">{{ vacancies[i].v_desc }}</p>

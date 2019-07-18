@@ -1,0 +1,189 @@
+{% extends "base.twig" %}
+
+{% block title %}Jobs in Malaysia | Jobstreet{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    <header class="header-section">
+        <div class="header-warp">
+            <div class="container">
+                <div class="row">
+                    <div class="main-menu col align-self-start">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/v1/vacancies/all">Search Jobs</a></li>
+                    </div>
+                    <div class="user-panel col align-self-end text-right">
+                        <button id="header-login-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                data-target="#login-panel">Login</button>
+                        <span>/</span>
+                        <button id="header-register-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                data-target="#register-panel">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block section %}
+<section class="hero-section bg-color" style="padding-top: 40px">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card search-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Search Criteria</h5>
+                        <form class="search-card" action="" method="post">
+                            <div class="form-group">
+                                <input type="text" id="card-job-keyword" class="form-control" placeholder="Job Keywords">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="card-job-location" class="form-control" placeholder="Location">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="card-job-min-salary" class="form-control" placeholder="Min. Salary (MYR)">
+                            </div>
+                            <button class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="card-deck">
+                    {% for i in range(0, count-1) %}
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="link-title-color" style="margin-bottom: 10px">
+                                    <a href="/v1/vacancies/{{ vacancies[i].vacancy_id }}" class="card-title">
+                                        {{ vacancies[i].v_name }}
+                                    </a>
+                                </h5>
+                                <h6><a href="#" class="card-subtitle mb-2 card-link">{{ vacancies[i].company_name }}</a></h6>
+                                <ul id="job_desc_summary" class="list-unstyled" style="margin-top: 5px;">
+                                    <li id="job_salary" class="job-salary">
+                                        <i class="icon fas fa-dollar-sign"></i>
+                                        <span>{{ vacancies[i].v_salary }}</span>
+                                    </li>
+                                    <li id="job_location" class="job-location">
+                                        <i class="icon fas fa-location-arrow"></i>
+                                        <span>{{ vacancies[i].v_state }}</span>
+                                    </li>
+                                </ul>
+                                <p class="card-text crop-text-2">{{ vacancies[i].v_desc }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <i class="icon fas fa-angle-up"></i>
+                                <small class="text-muted">Closing date: {{ vacancies[i].v_closing_date }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Login Modal -->
+    <div class="modal fade" id="login-panel" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col align-self-start">
+                            <h4 class="modal-title">Login</h4>
+                        </div>
+                        <div class="col position-absolute">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form class="login-form" action="/v1/employee/login" method="post">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" name="email" id="email" autocomplete="off"
+                                   placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" name="password" id="password" autocomplete="off"
+                                   placeholder="Password" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="login">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="register-panel" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header d-flex align-content-around">
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="p-2 modal-title">Register</h4>
+                        </div>
+                        <div class="col position-absolute">
+                            <button type="button" class="ml-5 close" data-dismiss="modal">&times;</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form class="register-form" action="/v1/employee/register" method="post">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="first_name">First Name:</label>
+                                <input type="text" class="form-control form-control-sm" name="first_name" id="first_name" autocomplete="off"
+                                       placeholder="First Name" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="last_name">Last Name:</label>
+                                <input type="text" class="form-control form-control-sm" name="last_name" id="last_name" autocomplete="off"
+                                       placeholder="Last Name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control form-control-sm" name="email" id="email" autocomplete="off"
+                                   placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact_no">Contact No:</label>
+                            <input type="text" class="form-control form-control-sm" name="contact_no" id="contact_no" autocomplete="off"
+                                   placeholder="Phone Number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control form-control-sm" name="password" id="password" autocomplete="off"
+                                   placeholder="Password" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="login">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

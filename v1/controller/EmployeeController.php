@@ -300,7 +300,7 @@ class EmployeeController
     }
 
     public function viewVacancies(Request $request, Response $response){
-        $sql_view_vacancies = "SELECT company_name, v_name, v_location, v_salary, v_desc, v_closing_date FROM vacancies";
+        $sql_view_vacancies = "SELECT vacancy_id, company_name, v_name, v_state, v_salary, v_desc, v_closing_date FROM vacancies";
         $result = $this->db->query($sql_view_vacancies);
         $count = 0;
 
@@ -308,15 +308,26 @@ class EmployeeController
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 $vacancies[] = $row;
                 $count++;
-                //$this->session->set('vacancies', $vacancies);
             }
-            //$this->session->set('count', $count);
-            try {
-                echo $this->twig->render("vacancies.twig", ['name' => $this->session->get('first_name'),
-                    'last_name' => $this->session->get('last_name'), 'vacancies' => $vacancies, 'count' => $count]);
-            } catch (\Twig\Error\LoaderError $e) {
-            } catch (\Twig\Error\RuntimeError $e) {
-            } catch (\Twig\Error\SyntaxError $e) {
+//            return $response->withRedirect('/v1/vacancies/all');
+            if ($this->session->get('logged_in') == true){
+                try {
+                    echo $this->twig->render("vacancies.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'vacancies' => $vacancies,
+                        'count' => $count]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+            else {
+                try {
+                    echo $this->twig->render("a_vacancies.twig", ['vacancies' => $vacancies,
+                        'count' => $count]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
@@ -329,16 +340,23 @@ class EmployeeController
         $vacancy_id = $args['vacancy_id'];
 
         $sql_vacancy_details = $this->db->prepare
-            ("SELECT company_name, v_name, v_desc, v_requirements, v_position, v_location, v_salary 
-                FROM vacancies WHERE vacancy_id = ?");
+            ("SELECT vacancies.company_name, vacancies.v_name, vacancies.v_desc, vacancies.v_address, vacancies.v_requirements, 
+            vacancies.v_position, vacancies.v_state, vacancies.v_salary, vacancies.v_closing_date, employer_profile.* FROM vacancies INNER JOIN 
+            employer_profile on employer_profile.id = vacancies.id WHERE vacancy_id = ?");
         $result = $sql_vacancy_details->execute(array($vacancy_id));
 
         if ($result == true) {
             while ($row = $sql_vacancy_details->fetch(PDO::FETCH_ASSOC)) {
-                $data[] = $row;
+                $vacancy_details[] = $row;
                 //echo json_encode($data);
             }
-            return $response->withStatus(200);
+            try {
+                echo $this->twig->render("vacancy_details.twig", ['name' => $this->session->get('first_name'),
+                    'last_name' => $this->session->get('last_name'), 'vacancy_details' => $vacancy_details]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
         else {
             $data = "No data found for this job";

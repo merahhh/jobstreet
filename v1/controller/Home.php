@@ -16,9 +16,6 @@ class Home
         $loader = new FilesystemLoader(__DIR__ . '/../../public/tpl/employee');
         $this->twig_user = new Environment($loader, ['debug' => true]);
         $this->twig_user->addExtension(new \Twig\Extension\DebugExtension());
-
-        $loader = new FilesystemLoader(__DIR__ . '/../../public/tpl/anonymous');
-        $this->twig_anon = new Environment($loader, ['debug' => true]);
     }
 
     public function index(){
@@ -32,7 +29,7 @@ class Home
         }
         else {
             try {
-                echo $this->twig_user->render("index.twig");
+                echo $this->twig_user->render("a_index.twig");
             } catch (\Twig\Error\LoaderError $e) {
             } catch (\Twig\Error\RuntimeError $e) {
             } catch (\Twig\Error\SyntaxError $e) {
@@ -57,7 +54,8 @@ class Home
     public function about(){
         if ($this->session->get('logged_in') == true){
             try {
-                echo $this->twig_user->render("about.twig");
+                echo $this->twig_user->render("about.twig", ['name' => $this->session->get('first_name'),
+                    'last_name' => $this->session->get('last_name')]);
             } catch (\Twig\Error\LoaderError $e) {
                 echo "error";
             } catch (\Twig\Error\RuntimeError $e) {
@@ -68,7 +66,7 @@ class Home
         }
         else {
             try {
-                echo $this->twig_anon->render("a_about.twig");
+                echo $this->twig_user->render("a_about.twig");
             } catch (\Twig\Error\LoaderError $e) {
             } catch (\Twig\Error\RuntimeError $e) {
             } catch (\Twig\Error\SyntaxError $e) {
@@ -76,7 +74,7 @@ class Home
         }
     }
 
-//    public function viewAllVacancies(){
+//    public function viewVacancies(){
 //        if ($this->session->get('logged_in') == true){
 //            try {
 //                echo $this->twig_user->render("vacancies.twig", ['name' => $this->session->get('first_name'),
@@ -89,7 +87,7 @@ class Home
 //        }
 //        else {
 //            try {
-//                echo $this->twig_anon->render("a_vacancies.twig", ['vacancies' => $this->session->get('vacancies'),
+//                echo $this->twig_user->render("a_vacancies.twig", ['vacancies' => $this->session->get('vacancies'),
 //                    'count' => $this->session->get('count')]);
 //            } catch (\Twig\Error\LoaderError $e) {
 //            } catch (\Twig\Error\RuntimeError $e) {
