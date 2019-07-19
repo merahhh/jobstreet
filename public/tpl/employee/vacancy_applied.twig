@@ -1,0 +1,31 @@
+{% extends "base.twig" %}
+
+{% block title %}
+    Jobstreet.io | Online Job Application
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section class="hero-section bg-color h-100" style="padding-top: 40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col" style="padding-top: 12px">
+                                    <h5 class="card-title">Application Success</h5>
+                                    <p>{{ data }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

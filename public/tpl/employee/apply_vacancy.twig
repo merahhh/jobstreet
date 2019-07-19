@@ -1,0 +1,92 @@
+{% extends "base.twig" %}
+
+{% block title %}
+    {% for i in range(0, 0) %}
+        Jobstreet.io | Online Job Application
+    {% endfor %}
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section class="hero-section bg-color" style="padding-top: 40px">
+        {% for i in range(0, 0) %}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card col-separation">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col" style="padding-top: 12px">
+                                    <h5 class="card-title">{{ vacancy_application[i].v_name }}</h5>
+                                    <h6><a href="#" class="card-subtitle mb-2 card-link text-light-weight">
+                                            {{ vacancy_application[i].company_name }}</a></h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col vacancy_summary">
+                                    <ul id="job_desc_summary" class="list-unstyled" style="margin-top: 5px;">
+                                        <li id="job_salary" class="job-salary">
+                                            <i class="icon fas fa-dollar-sign" style="color:green"></i>
+                                            <span>{{ vacancy_application[i].v_salary }}</span>
+                                        </li>
+                                        <li id="job_position" class="job-position">
+                                            <i class="icon fas fa-suitcase" style="color:blue"></i>
+                                            <span>{{ vacancy_application[i].v_position }}</span>
+                                        </li>
+                                        <li id="job_location" class="job-location">
+                                            <i class="icon fas fa-location-arrow" style="color:red"></i>
+                                            <span>{{ vacancy_application[i].v_state }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="card col-separation">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title">{{ name }}</h5>
+                                    <h6 class="card-subtitle text-muted mb-2 card-link text-light-weight">
+                                        <div class="row">
+                                            <div class="col">
+                                                <i class='fas fa-envelope'></i>
+                                                <span>{{ email }}</span>
+                                            </div>
+                                            <div class="col">
+                                                <i class='fas fa-phone'></i>
+                                                <span>{{ contact }}</span>
+                                            </div>
+                                            <div class="col"></div>
+
+                                        </div>
+
+                                    </h6>
+                                    <hr class="horizontal-line">
+                                    <div id="pitch_panel">
+                                        <form method="post" action="/v1/employee/vacancies/{{ vacancy_application[i].vacancy_id }}/applied">
+                                            <div class="form-group">
+                                                <p>
+                                                    <label for="pitch" class="text-muted">Make your pitch! (Recommended)</label>
+                                                    <textarea id="pitch" name="pitch" class="form-control pitch-box" placeholder="Tell the employer why you are best suited for this role. Highlight specific skills and how you can contribute. Avoid generic pitches e.g I am responsible."></textarea>
+                                                </p>
+                                            </div>
+                                            <button class="btn btn-primary">Submit Application</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+{% endblock %}

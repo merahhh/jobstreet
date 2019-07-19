@@ -74,6 +74,19 @@ class Home
         }
     }
 
+    public function applyVacancy(){
+        try {
+            echo $this->twig_user->render("apply_vacancy.twig", ['name' => $this->session->get('first_name'),
+                'last_name' => $this->session->get('last_name')]);
+        } catch (\Twig\Error\LoaderError $e) {
+            echo "error";
+        } catch (\Twig\Error\RuntimeError $e) {
+            echo "error2";
+        } catch (\Twig\Error\SyntaxError $e) {
+            echo "error3";
+        }
+    }
+
 //    public function viewVacancies(){
 //        if ($this->session->get('logged_in') == true){
 //            try {

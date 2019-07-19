@@ -26,7 +26,9 @@ $app->group('/v1', function (App $app) {
         $app->put('/profile/edit', EmployeeController::class . ':editProfileEmployee');
 
         #apply for job
-        $app->post('/vacancies/{vacancy_id}/apply', EmployeeController::class . ':applyVacancy');
+        $app->post('/vacancies/{vacancy_id}/applied', EmployeeController::class . ':applyVacancy'); #after pressing submit
+        $app->get('/vacancies/{vacancy_id}/application', EmployeeController::class . ':vacancyApplication');
+        //$app->get('/vacancies/apply', Home::class . ':applyVacancy');
 
         #view job applications
         $app->get('/profile/vacancies_applied', EmployeeController::class . ':viewApplications');

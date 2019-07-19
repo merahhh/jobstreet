@@ -145,6 +145,7 @@ class EmployeeController
                     $this->session->set('email', $user['email']);
                     $this->session->set('first_name', $user['first_name']);
                     $this->session->set('last_name', $user['last_name']);
+                    $this->session->set('contact', $user['contact']);
                     //$this->session->set('active', $user['active']);
 
                     #this is how we'll know the user is logged in
@@ -340,15 +341,15 @@ class EmployeeController
         $vacancy_id = $args['vacancy_id'];
 
         $sql_vacancy_details = $this->db->prepare
-            ("SELECT vacancies.company_name, vacancies.v_name, vacancies.v_desc, vacancies.v_address, vacancies.v_requirements, 
-            vacancies.v_position, vacancies.v_state, vacancies.v_salary, vacancies.v_closing_date, employer_profile.* FROM vacancies INNER JOIN 
-            employer_profile on employer_profile.id = vacancies.id WHERE vacancy_id = ?");
+            ("SELECT vacancies.vacancy_id, vacancies.company_name, vacancies.v_name, vacancies.v_desc, vacancies.v_address, 
+            vacancies.v_requirements, vacancies.v_position, vacancies.v_state, vacancies.v_salary, 
+            vacancies.v_closing_date, employer_profile.* FROM vacancies INNER JOIN employer_profile on 
+            employer_profile.id = vacancies.id WHERE vacancy_id = ?");
         $result = $sql_vacancy_details->execute(array($vacancy_id));
 
         if ($result == true) {
             while ($row = $sql_vacancy_details->fetch(PDO::FETCH_ASSOC)) {
                 $vacancy_details[] = $row;
-                //echo json_encode($data);
             }
             try {
                 echo $this->twig->render("vacancy_details.twig", ['name' => $this->session->get('first_name'),
@@ -364,10 +365,49 @@ class EmployeeController
         }
     }
 
+    public function vacancyApplication(Request $request, Response $response, array $args){
+        if ($this->session->get('logged_in') == true){
+            $vacancy_id = $args['vacancy_id'];
+            $sql_vacancy_details = $this->db->prepare
+                ("SELECT vacancies.vacancy_id, vacancies.company_name, vacancies.v_name, vacancies.v_desc, vacancies.v_address, 
+                vacancies.v_requirements, vacancies.v_position, vacancies.v_state, vacancies.v_salary, 
+                vacancies.v_closing_date, employer_profile.* FROM vacancies INNER JOIN employer_profile on 
+                employer_profile.id = vacancies.id WHERE vacancy_id = ?");
+            $result = $sql_vacancy_details->execute(array($vacancy_id));
+
+            if ($result == true) {
+                while ($row = $sql_vacancy_details->fetch(PDO::FETCH_ASSOC)) {
+                    $vacancy_application[] = $row;
+                }
+                try {
+                    echo $this->twig->render("apply_vacancy.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'vacancy_application' => $vacancy_application,
+                        'email' => $this->session->get('email'), 'contact' => $this->session->get('contact')]);
+                } catch (\Twig\Error\LoaderError $e) {
+                    echo "error";
+                } catch (\Twig\Error\RuntimeError $e) {
+                    echo "error2";
+                } catch (\Twig\Error\SyntaxError $e) {
+                    echo "error3";
+                }
+//            return $response->withRedirect('/v1/employee/vacancies/$vacancy_id/application');
+            }
+            else {      //query failed
+                $data = "User data missing!";
+                return $response->withJson($data, 500);
+            }
+        }
+        else {      //if not logged in
+            $message = "Please log in to apply for this job";
+            return $response->withJson($message, 403);
+        }
+    }
+
     public function applyVacancy(Request $request, Response $response, array $args){
         if ($this->session->get('logged_in') == true) {
-            $pitch = json_decode($request->getBody())->pitch;
-            $applicant_id = $this->generateUniqueApplicantID();
+            $get_pitch = $request->getParsedBody();
+            $pitch = $get_pitch['pitch'];
+            $application_id = $this->generateUniqueApplicantID();
             $vacancy_id = $args['vacancy_id'];
             $employee_id = $this->session->get('id');
             $date_submitted = date("F d, Y");
@@ -375,12 +415,20 @@ class EmployeeController
             $sql_apply_vacancy = $this->db->prepare
                 ("INSERT INTO vacancy_applicants (application_id, vacancy_id, id, pitch, date_submitted) VALUES 
                     (?, ?, ?, ?, ?)");
-            $result = $sql_apply_vacancy->execute(array($applicant_id, $vacancy_id, $employee_id, $pitch, $date_submitted));
+            $result = $sql_apply_vacancy->execute(array($application_id, $vacancy_id, $employee_id, $pitch, $date_submitted));
 
             if ($result == true){
-                $data = "Application sent! Please check your application status again soon and be alert 
-                    to avoid any missed contact attempts from the employer.";
-                return $response->withJson($data, 400);
+                $data = "Application sent! Please check your application status (under the 'My Applications' tab) again soon and be alert to avoid any missed contact attempts from the employer.";
+                try {
+                    echo $this->twig->render("vacancy_applied.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'data' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                    echo "error";
+                } catch (\Twig\Error\RuntimeError $e) {
+                    echo "error2";
+                } catch (\Twig\Error\SyntaxError $e) {
+                    echo "error3";
+                }
             }
             else{
                 $data = "Application for job not sent!";

@@ -87,7 +87,8 @@
                                         </p>
                                     </div>
                                     <div class="col align-self-end text-right">
-                                        <form action="" method="post">
+                                        <form action="/v1/employee/vacancies/{{ vacancy_details[i].vacancy_id }}/application"
+                                              method="get">
                                             <button class="btn btn-primary">Apply Now</button>
                                         </form>
                                     </div>
@@ -106,7 +107,7 @@
                                                     <strong>Website:</strong>
                                                 </div>
                                                 <div class="vacancy-details-body vacancy-details-small">
-                                                    <a href="{{ vacancy_details[i].company_website }}">
+                                                    <a href="http://{{ vacancy_details[i].company_website }}">
                                                         {{ vacancy_details[i].company_website }}</a>
                                                 </div>
                                                 <div>

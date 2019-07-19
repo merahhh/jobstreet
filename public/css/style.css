@@ -12,11 +12,19 @@
 
 html,
 body {
-	height: 100%;
+	min-height: 100%;
 	font-family: 'Raleway', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased;
 }
+form input {
+	font-size: 13px!important;
+}
+
+form button {
+	font-size: 13px!important;
+}
+
 h1,
 h2,
 h3,
@@ -477,6 +485,7 @@ ol {
 ---------------------*/
 
 .hero-section {
+	min-height: 450px;
 	height: max-content;
 	padding-bottom: 50px;
 }
@@ -1115,6 +1124,15 @@ ol {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 13px;
+}
+
+/*------------------
+  Job Application section
+---------------------*/
+
+.pitch-box {
+	min-height: 140px;
+	font-size: 13px!important;
 }
 
 /*------------------
