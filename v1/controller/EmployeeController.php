@@ -151,11 +151,6 @@ class EmployeeController
                     #this is how we'll know the user is logged in
                     $this->session->set('logged_in', true);
                     $data = 'Successfully logged in';
-                    $response->withRedirect('/v1/home');
-                    //return $response->withJson($data, 200);
-                    //return $this->view->render($response, 'home.twig');
-                    //return $this->view->render($response,
-                    //    'home.twig', ['name' => $this->session->get('first_name')]);
                     return $response->withRedirect('/');
 
                 }
@@ -211,7 +206,7 @@ class EmployeeController
                 ("SELECT employee_profile.gender, employee_profile.age, employee_profile.nationality, 
                 employee_profile.experience, employee_profile.skills, employee_profile.language,
                 employee_profile.expected_salary, employee_profile.location, employee_education.institute, 
-                employee_education.graduation_time, employee_education.qualification, employee_education.major,
+                employee_education.grad_month, employee_education.grad_year, employee_education.qualification, employee_education.major,
                 employee_education.grade FROM employee_profile INNER JOIN employee_education ON 
                 employee_profile.education_id = employee_education.education_id WHERE employee_profile.id = ?");
             $result = $sql_get_profile->execute(array($this->session->get('id')));
@@ -225,7 +220,8 @@ class EmployeeController
                 }
                 try {
                     echo $this->twig->render("profile.twig", ['name' => $this->session->get('first_name'),
-                        'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile') ]);
+                        'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile'),
+                        'id' => $this->session->get('id')]);
                 } catch (\Twig\Error\LoaderError $e) {
                 } catch (\Twig\Error\RuntimeError $e) {
                 } catch (\Twig\Error\SyntaxError $e) {
@@ -242,59 +238,169 @@ class EmployeeController
         }
     }
 
-    public function editProfileEmployee(Request $request, Response $response){
+    public function editProfileEducation(Request $request, Response $response){
         if ($this->session->get('logged_in') == true) {
-            $gender = json_decode($request->getBody())->gender;
-            $age = json_decode($request->getBody())->age;
-            $nationality = json_decode($request->getBody())->nationality;
-            $experience = json_decode($request->getBody())->experience;
-            $skills = json_decode($request->getBody())->skills;
-            $language = json_decode($request->getBody())->language;
-            $expected_salary = json_decode($request->getBody())->expected_salary;
-            $location = json_decode($request->getBody())->location;
-            $resume = json_decode($request->getBody())->resume;
-            $institute = json_decode($request->getBody())->institute;
-            $graduation_time = json_decode($request->getBody())->graduation_time;
-            $qualification = json_decode($request->getBody())->qualification;
-            $major = json_decode($request->getBody())->major;
-            $grade = json_decode($request->getBody())->grade;
-
-            //$this->session->set('education_id', $this->generateUniqueEmployeeID());
-            //$education_id = $this->session->get('education_id');
+            $user = $request->getParsedBody();
+            $institute = $user['edit-profile-uni'];
+            $grad_month = $user['edit-profile-grad-month'];
+            $grad_year = $user['edit-profile-grad-year'];
+            $qualification = $user['edit-profile-qualification'];
+            $major = $user['edit-profile-major'];
+            $grade = $user['edit-profile-grade'];
             $id = $this->session->get('id');
 
-            #update employee_profile table
-            $sql_edit_profile = $this->db->prepare
-                ("UPDATE employee_profile SET gender = ?, age = ?, nationality = ?, experience = ?, skills = ?, 
-                language = ?, expected_salary = ?, location = ?, resume = ? WHERE id = ?");
-            $result = $sql_edit_profile->execute
-                ([$gender, $age, $nationality, $experience, $skills, $language, $expected_salary, $location, $resume, $id]);
+            $sql_edit_education = $this->db->prepare
+            ("UPDATE employee_education SET institute = ?, grad_month = ?, grad_year = ?, qualification = ?, major = ?, grade = ?
+                WHERE id = ?");
+            $result = $sql_edit_education->execute([$institute, $grad_month, $grad_year, $qualification, $major, $grade, $id]);
 
-            #if insert into employee_profile successful
             if ($result == true){
-                #update employee_education table
-                $sql_edit_education = $this->db->prepare
-                    ("UPDATE employee_education SET institute = ?, graduation_time = ?, qualification = ?, 
-                    major = ?, grade = ? WHERE id = ?");
-                $result_education = $sql_edit_education->execute
-                    ([$institute, $graduation_time, $qualification, $major, $grade, $id]);
-
-                #if insert into employee_education successful
-                if ($result_education == true){
-                    $message = "Profile edited!";
-                    return $response->withJson($message, 200);
-                }
-                else {
-                    $message = "Unable to edit education profile";
-                    return $response->withJson($message, 500);
+                try {
+                    echo $this->twig->render("edit_profile.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile'),
+                        'id' => $this->session->get('id')]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
                 }
             }
-            else {
-                $message = "Unable to edit profile";
+            else{
+                $message = "Unable to edit education";
                 return $response->withJson($message, 500);
             }
         }
-        else {
+        else{
+            $message = "Please log in to edit your profile";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function editProfileExperience(Request $request, Response $response){
+        if ($this->session->get('logged_in') == true){
+            $user = $request->getParsedBody();
+            $experience = $user['edit-profile-experience'];
+            $id = $this->session->get('id');
+
+            $sql_edit_experience = $this->db->prepare
+            ("UPDATE employee_profile SET experience = ? WHERE id = ?");
+            $result = $sql_edit_experience->execute([$experience, $id]);
+
+            if ($result == true){
+                try {
+                    echo $this->twig->render("edit_profile.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile'),
+                        'id' => $this->session->get('id')]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+            else{
+                $message = "Unable to edit experience";
+                return $response->withJson($message, 500);
+            }
+        }
+        else{
+            $message = "Please log in to edit your profile";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function editProfileSkills(Request $request, Response $response){
+        if ($this->session->get('logged_in') == true) {
+            $user = $request->getParsedBody();
+            $skills = $user['edit-profile-skills'];
+            $id = $this->session->get('id');
+
+            $sql_edit_experience = $this->db->prepare
+            ("UPDATE employee_profile SET skills = ? WHERE id = ?");
+            $result = $sql_edit_experience->execute([$skills, $id]);
+
+            if ($result == true){
+                try {
+                    echo $this->twig->render("edit_profile.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile'),
+                        'id' => $this->session->get('id')]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+            else{
+                $message = "Unable to edit skills";
+                return $response->withJson($message, 500);
+            }
+        }
+        else{
+            $message = "Please log in to edit your profile";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function editProfileLanguage(Request $request, Response $response){
+        if ($this->session->get('logged_in') == true){
+            $user = $request->getParsedBody();
+            $language = $user['edit-profile-language'];
+            $id = $this->session->get('id');
+
+            $sql_edit_experience = $this->db->prepare
+            ("UPDATE employee_profile SET language = ? WHERE id = ?");
+            $result = $sql_edit_experience->execute([$language, $id]);
+
+            if ($result == true){
+                try {
+                    echo $this->twig->render("edit_profile.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile'),
+                        'id' => $this->session->get('id')]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+            else{
+                $message = "Unable to edit language";
+                return $response->withJson($message, 500);
+            }
+        }
+        else{
+            $message = "Please log in to edit your profile";
+            return $response->withJson($message, 403);
+        }
+    }
+
+    public function editProfileAboutMe(Request $request, Response $response){
+        if ($this->session->get('logged_in') == true){
+            $user = $request->getParsedBody();
+            $first_name = $user['edit-profile-first-name'];
+            $last_name = $user['edit-profile-last-name'];
+            $gender = $user['edit-profile-gender'];
+            $email = $user['edit-profile-email'];
+            $contact = $user['edit-profile-contact-no'];
+            $expected_salary = $user['edit-profile-expected-salary'];
+            $id = $this->session->get('id');
+
+            $sql_edit_education = $this->db->prepare
+            ("UPDATE employee, employee_profile SET employee.first_name = ?, employee.last_name = ?, employee.email = ?, 
+                employee.contact = ?, employee_profile.gender = ?, employee_profile.expected_salary = ?
+                WHERE employee.id = employee_profile.id AND employee_profile.id = ?");
+            $result = $sql_edit_education->execute([$first_name, $last_name, $email, $contact, $gender, $expected_salary, $id ]);
+
+            if ($result == true){
+                try {
+                    echo $this->twig->render("edit_profile.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile'),
+                        'id' => $this->session->get('id')]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+            else{
+                $message = "Unable to edit about me";
+                return $response->withJson($message, 500);
+            }
+        }
+        else{
             $message = "Please log in to edit your profile";
             return $response->withJson($message, 403);
         }
@@ -486,6 +592,34 @@ class EmployeeController
         else {
             $message = "Please log in to view your job applications";
             return $response->withJson($message, 403);
+        }
+    }
+
+    public function search(Request $request, Response $response, array $args){
+        $user = $request->getParsedBody();
+        $keyword = $user['card-job-keyword'];
+
+        $sql_search_keyword = $this->db->prepare
+        ("SELECT * FROM vacancies WHERE v_name LIKE ? OR v_requirements LIKE ?");
+        $result = $sql_search_keyword->execute(["%$keyword%", "%$keyword%"]);
+        $count = 0;
+
+        if ($result == true){
+            while ($row = $sql_search_keyword->fetch(PDO::FETCH_ASSOC)) {
+                $vacancies_search[] = $row;
+                $count++;
+            }
+            try {
+                echo $this->twig->render("a_vacancies.twig", ['name' => $this->session->get('first_name'),
+                    'last_name' => $this->session->get('last_name'), 'vacancies' => $vacancies_search, 'count' => $count]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
+        }
+        else{
+            $message = "No jobs found that match your criteria :(";
+            return $response->withJson($message, 400);
         }
     }
 }

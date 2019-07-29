@@ -86,15 +86,17 @@ class EmployerController
 
     public function loginEmployer(Request $request, Response $response){
         try{
-            $company_email = json_decode($request->getBody())->company_email;
-            $employer = $this->employer->getInfoAssoc($company_email);
+            $allPostPutVars = $request->getParsedBody();
+            $email = $allPostPutVars['company_email'];
+            $password = $allPostPutVars['company_password'];
+            $employer = $this->employer->getInfoAssoc($email);
 
             if ($employer == null){
                 $data = 'Employee does not exist';
                 return $response->withJson($data, 404);
             }
             else{   #if password is correct
-                if (password_verify(json_decode($request->getBody())->company_password, $employer['company_password'])){
+                if (password_verify($password, $employer['company_password'])){
                     $this->session->set('id', $employer['id']);
                     $this->session->set('company_name', $employer['company_name']);
                     $this->session->set('company_contact_person', $employer['company_contact_person']);
@@ -106,7 +108,7 @@ class EmployerController
                     #this is how we'll know the employer is logged in
                     $this->session->set('logged_in', true);
                     $data = 'Successfully logged in';
-                    return $response->withJson($data, 200);
+                    return $response->withRedirect('/v1/employer/');
                 }
                 else{    #if password is incorrect
                     $data = 'Incorrect password';
@@ -144,7 +146,7 @@ class EmployerController
             $this->session->set('logged_in', false);
             //$this->session->destroySession();
             $message = 'Successfully logged out!';
-            return $response->withJson($message, 200);
+            return $response->withRedirect('/v1/employer/');
 
         } catch (exception $e){
             $data = 'Oops, something went wrong!';

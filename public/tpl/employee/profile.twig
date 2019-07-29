@@ -1,144 +1,122 @@
 {% extends "base.twig" %}
 
-{% block title %}Jobstreet | About Us{% endblock %}
+{% block title %}Jobstreet | My Jobstreet Profile{% endblock %}
 
 {% block head %}
     {{ parent() }}
 {% endblock %}
 
 {% block section %}
-<section class="hero-section bg-color" style="padding-top: 40px">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-body">
-                        <img class="profile-picture card-img-top" src="../../img/20190614_173020.jpeg" alt="Profile Picture">
+    {% for i in range(0, 0) %}
+    <section class="hero-section bg-color" style="padding-top: 40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <img class="profile-picture card-img-top" src="../../img/20190614_173020.jpeg" alt="Profile Picture">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-9">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col align-self-start">
-                                <h5>{{ name }} {{ last_name }}</h5>
-                            </div>
-                            <div class="col align-self-end">
-                                <button class="btn btn-link float-right" id="edit-profile-btn" name="edit-profile"
-                                        href="#">Edit Profile</button>
+                <div class="col-sm-9">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col align-self-start">
+                                    <h5>{{ name }} {{ last_name }}</h5>
+                                </div>
+                                <div class="col align-self-end">
+                                    <a class="btn btn-link float-right" id="edit-profile-btn"
+                                       href="/v1/employee/profile/{{ id }}/edit">Edit Profile</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title">About Me</h6>
-                        <div class="row">
-                            <p class="card-text col-md-3">
-                                <b>Gender</b>
-                            </p>
-                            <p class="card-text col-md-2 offset-md-2">
-                                {% for i in range(0, 0) %}
+                        <div class="card-body">
+                            <h6 class="card-title">About Me</h6>
+                            <div class="row">
+                                <p class="card-text col-md-3">
+                                    <b>Gender</b>
+                                </p>
+                                <p class="card-text col-md-2 offset-md-2">
                                     {{ ep[i].gender }}
-                                {% endfor %}
-                            </p>
-                        </div>
-                        <div class="row">
-                            <p class="card-text col-md-3">
-                                <b>Age</b>
-                            </p>
-                            <p class="card-text col-md-2 offset-md-2">
-                                {% for i in range(0, 0) %}
+                                </p>
+                            </div>
+                            <div class="row">
+                                <p class="card-text col-md-3">
+                                    <b>Age</b>
+                                </p>
+                                <p class="card-text col-md-2 offset-md-2">
                                     {{ ep[i].age }} years
-                                {% endfor %}
-                            </p>
-                        </div>
-                        <div class="row">
-                            <p class="card-text col-md-3">
-                                <b>Nationality</b>
-                            </p>
-                            <p class="card-text col-md-2 offset-md-2">
-                                {% for i in range(0, 0) %}
+                                </p>
+                            </div>
+                            <div class="row">
+                                <p class="card-text col-md-3">
+                                    <b>Nationality</b>
+                                </p>
+                                <p class="card-text col-md-2 offset-md-2">
                                     {{ ep[i].nationality }}
-                                {% endfor %}
-                            </p>
-                        </div>
-                        <hr class="horizontal-line">
+                                </p>
+                            </div>
+                            <hr class="horizontal-line">
 
 
-                        <h6 class="card-title">Education</h6>
-                        <div class="row">
-                            <p class="card-text col-md-3">
-                                <b>{% for i in range(0, 0) %}
-                                        {{ ep[i].graduation_time }}
-                                    {% endfor %}
-                                </b>
-                            </p>
-                            <p class="card-text col-md-6 offset-md-2">
-                                {% for i in range(0, 0) %}
+                            <h6 class="card-title">Education</h6>
+                            <div class="row">
+                                <p class="card-text col-md-3">
+                                    <b>{{ ep[i].grad_month }} {{ ep[i].grad_year }}</b>
+                                </p>
+                                <p class="card-text col-md-6 offset-md-2">
                                     {{ ep[i].qualification }} in {{ ep[i].major }}
-                                {% endfor %}
-                            </p>
-                        </div>
-                        <div class="row">
-                            <p class="card-text col-md-3">
-                            </p>
-                            <p class="card-text col-md-6 offset-md-2">
-                                {% for i in range(0, 0) %}
+                                </p>
+                            </div>
+                            <div class="row">
+                                <p class="card-text col-md-3">
+                                </p>
+                                <p class="card-text col-md-6 offset-md-2">
                                     {{ ep[i].institute }}
-                                {% endfor %}
-                            </p>
-                        </div>
+                                </p>
+                            </div>
 
-                        <hr class="horizontal-line">
-                        <h6 class="card-title">Experience</h6>
-                        <p class="card-text">
-                            {% for i in range(0, 0) %}
+                            <hr class="horizontal-line">
+                            <h6 class="card-title">Experience</h6>
+                            <p class="card-text">
                                 {{ ep[i].experience }}
-                            {% endfor %}
-                        </p>
-                        <hr class="horizontal-line">
-                        <h6 class="card-title">Skills</h6>
-                        <p class="card-text">
-                            {% for i in range(0, 0) %}
+                            </p>
+                            <hr class="horizontal-line">
+                            <h6 class="card-title">Skills</h6>
+                            <p class="card-text">
                                 {{ ep[i].skills }}
-                            {% endfor %}
-                        </p>
-                        <hr class="horizontal-line">
-                        <h6 class="card-title">Languages</h6>
-                        <p class="card-text">
-                            {% for i in range(0, 0) %}
+                            </p>
+                            <hr class="horizontal-line">
+                            <h6 class="card-title">Languages</h6>
+                            <p class="card-text">
                                 {{ ep[i].language }}
-                            {% endfor %}
-                        </p>
-                        <hr class="horizontal-line">
-                        <h6 class="card-title">Additional Info</h6>
-                        <div class="row">
-                            <p class="card-text col-md-3">
-                                <b>Expected Salary</b>
                             </p>
-                            <p class="card-text col-md-6 offset-md-2">
-                                {% for i in range(0, 0) %}
+                            <hr class="horizontal-line">
+                            <h6 class="card-title">Additional Info</h6>
+                            <div class="row">
+                                <p class="card-text col-md-3">
+                                    <b>Expected Salary</b>
+                                </p>
+                                <p class="card-text col-md-6 offset-md-2">
                                     RM {{ ep[i].expected_salary }}
-                                {% endfor %}
-                            </p>
-                        </div>
-                        <div class="row">
-                            <p class="card-text col-md-3">
-                                <b>Preferred Work Location</b>
-                            </p>
-                            <p class="card-text col-md-6 offset-md-2">
-                                {% for i in range(0, 0) %}
+                                </p>
+                            </div>
+                            <div class="row">
+                                <p class="card-text col-md-3">
+                                    <b>Preferred Work Location</b>
+                                </p>
+                                <p class="card-text col-md-6 offset-md-2">
                                     {{ ep[i].location }}
-                                {% endfor %}
-                            </p>
-                            <p class="card-text col align-self-end"></p>
+                                </p>
+                                <p class="card-text col align-self-end"></p>
+                            </div>
+                            <hr class="horizontal-line">
                         </div>
-                        <hr class="horizontal-line">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
+    </section>
+{% endfor %}
 {% endblock %}

@@ -22,8 +22,18 @@ $app->group('/v1', function (App $app) {
         #view profile employee
         $app->get('/profile', EmployeeController::class . ':viewProfileEmployee');
 
-        #edit profile employee
-        $app->put('/profile/edit', EmployeeController::class . ':editProfileEmployee');
+        #open edit profile page
+        $app->get('/profile/{id}/edit', Home::class . ':editProfileEmployee');
+        #save edit profile employee education
+        $app->post('/profile/edit/education', EmployeeController::class . ':editProfileEducation');
+        #save edit profile employee experience
+        $app->post('/profile/edit/experience', EmployeeController::class . ':editProfileExperience');
+        #save edit profile employee skills
+        $app->post('/profile/edit/skills', EmployeeController::class . ':editProfileSkills');
+        #save edit profile employee language
+        $app->post('/profile/edit/language', EmployeeController::class . ':editProfileLanguage');
+        #save edit profile employee about
+        $app->post('/profile/edit/about', EmployeeController::class . ':editProfileAboutMe');
 
         #apply for job
         $app->post('/vacancies/{vacancy_id}/applied', EmployeeController::class . ':applyVacancy'); #after pressing submit
@@ -39,6 +49,9 @@ $app->group('/v1', function (App $app) {
     });
 
     $app->group('/employer', function (App $app){
+        #index
+        $app->get('/', Home::class . ':employersIndex');
+
         #register employer
         $app->post('/register', EmployerController::class . ':registerEmployer');
 
@@ -77,6 +90,9 @@ $app->group('/v1', function (App $app) {
         #view vacancies
         $app->get('/all', EmployeeController::class . ':viewVacancies');
         #$app->get('/view/all', Home::class . ':viewVacancies');
+
+        #search vacancies
+        $app->get('/search', EmployeeController::class . ':search');
 
         #view vacancy details
         $app->get('/{vacancy_id}', EmployeeController::class . ':viewFullVacancy');

@@ -1,0 +1,55 @@
+{% extends "e_base.twig" %}
+
+{% block title %}Jobstreet.io | No. 1 Job Posting Site{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+<section class="hero-section set-bg bg-overlay" style="background-image: url('../../img/e_index2.jpg');">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="hero-text text-white">
+                    <h2>Jobstreet</h2>
+                    <p> This is a test project developed to enhance my web development skills. This is
+                        influenced by Jobstreet.com which is the no. 1 recruitment site in Malaysia with over
+                        29,000 vacancies to find your next career opportunity.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="fact-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 text-center">
+                <h2>Integrated Sourcing</h2>
+                <div class="lead text-center">
+                    <p>Next level recruitment where Job Ads and Talent Search are integrated to make it easier and faster for you to source.</p>
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="col-md-1"></div>
+                <div class="col-md-5 fact-item text-center">
+                    <figure>
+                        <i class='fas fa-clipboard-list' style='font-size:48px; padding: 15px'></i>
+                        <h4>Job Ads</h4>
+                        <p>Attract the best talent and connect to quality candidates</p>
+                    </figure>
+                </div>
+                <div class="col-md-5 fact-item text-center">
+                    <figure>
+                        <i class='fas fa-search' style='font-size:48px; padding: 15px'></i>
+                        <h4>Talent Search</h4>
+                        <p>Proactively engage with talents in the marketplace</p>
+                    </figure>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

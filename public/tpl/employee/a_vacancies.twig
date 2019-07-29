@@ -37,9 +37,9 @@
                 <div class="card search-card">
                     <div class="card-body">
                         <h5 class="card-title">Search Criteria</h5>
-                        <form class="search-card" action="" method="post">
+                        <form class="search-card" action="/v1/vacancies/search" method="get">
                             <div class="form-group">
-                                <input type="text" id="card-job-keyword" class="form-control" placeholder="Job Keywords">
+                                <input type="text" name="card-job-keyword" id="card-job-keyword" class="form-control" placeholder="Job Keywords">
                             </div>
                             <div class="form-group">
                                 <input type="text" id="card-job-location" class="form-control" placeholder="Location">
@@ -47,7 +47,7 @@
                             <div class="form-group">
                                 <input type="text" id="card-job-min-salary" class="form-control" placeholder="Min. Salary (MYR)">
                             </div>
-                            <button class="btn btn-primary">Search</button>
+                            <button class="btn btn-primary" type="submit">Search</button>
                         </form>
                     </div>
                 </div>

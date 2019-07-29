@@ -1,0 +1,273 @@
+{% extends "base.twig" %}
+
+{% block title %}
+        Jobstreet.io | Edit My Profile
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    {% for i in range(0, 0) %}
+    <section class="hero-section bg-color" style="padding-top: 40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card card-body">
+                        <div class="nav flex-column nav-pills" id="profile-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-education-tab" data-toggle="pill" href="#v-pills-education" role="tab" aria-controls="v-pills-education" aria-selected="true">Education</a>
+                            <a class="nav-link" id="v-pills-experience-tab" data-toggle="pill" href="#v-pills-experience" role="tab" aria-controls="v-pills-experience" aria-selected="false">Experience</a>
+                            <a class="nav-link" id="v-pills-skills-tab" data-toggle="pill" href="#v-pills-skills" role="tab" aria-controls="v-pills-skills" aria-selected="false">Skills</a>
+                            <a class="nav-link" id="v-pills-languages-tab" data-toggle="pill" href="#v-pills-languages" role="tab" aria-controls="v-pills-languages" aria-selected="false">Languages</a>
+                            <a class="nav-link" id="v-pills-about-tab" data-toggle="pill" href="#v-pills-about" role="tab" aria-controls="v-pills-about" aria-selected="false">About Me</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-education" role="tabpanel" aria-labelledby="v-pills-education-tab">
+                                <div class="card-header">
+                                    <div class="container">
+                                        <div class="row">
+                                            <h5>Education</h5>
+                                        </div>
+                                        <div class="row">
+                                            <p>Please add your highest qualification</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="card-body">
+                                        <form id="edit-profile-education" action="/v1/employee/profile/edit/education" method="post">
+                                            <div class="form-group row">
+                                                <label for="edit-profile-education">Institute/University:</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="edit-profile-uni" value="{{ ep[i].institute }}"
+                                                           id="edit-profile-uni" autocomplete="off" placeholder="University Name" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="edit-profile-grad-month">Graduation Date:</label>
+                                                <div class="col-md-3">
+                                                    <select name="edit-profile-grad-month" id="edit-profile-grad-month" class="custom-select custom-select" style="font-size: 13px">
+                                                        <option selected>{{ ep[i].grad_month }}</option>
+                                                        <option value="January">January</option>
+                                                        <option value="February">February</option>
+                                                        <option value="March">March</option>
+                                                        <option value="April">April</option>
+                                                        <option value="May">May</option>
+                                                        <option value="June">June</option>
+                                                        <option value="July">July</option>
+                                                        <option value="August">August</option>
+                                                        <option value="September">September</option>
+                                                        <option value="October">October</option>
+                                                        <option value="November">November</option>
+                                                        <option value="December">December</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <input type="text" class="form-control" name="edit-profile-grad-year" value="{{ ep[i].grad_year }}"
+                                                           id="edit-profile-grad-year" autocomplete="off" placeholder="Year (ex: 1999)" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="edit-profile-qualification">Qualification:</label>
+                                                <div class="col-md-7">
+                                                    <select name="edit-profile-qualification" id="edit-profile-qualification" class="custom-select custom-select" style="font-size: 13px">
+                                                        <option selected>{{ ep[i].qualification }}</option>
+                                                        <option value="Primary/Secondary School/SPM/'O' Levels">Primary/Secondary School/SPM/'O' Levels</option>
+                                                        <option value="Higher Secondary/STPM/'A' Levels/Pre-U">Higher Secondary/STPM/'A' Levels/Pre-U</option>
+                                                        <option value="Professional Certificate">Professional Certificate</option>
+                                                        <option value="Diploma">Diploma</option>
+                                                        <option value="Advanced/Higher/Graduate Diploma">Advanced/Higher/Graduate Diploma</option>
+                                                        <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                                        <option value="Professional Degree">Professional Degree</option>
+                                                        <option value="Master's Degree">Master's Degree</option>
+                                                        <option value="Doctorate (PhD)">Doctorate (PhD)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="edit-profile-major">Major:</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="edit-profile-major" value="{{ ep[i].major }}"
+                                                           id="edit-profile-major" autocomplete="off" placeholder="Major" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="edit-profile-grade">Grade:</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control" name="edit-profile-grade" value="{{ ep[i].grade }}"
+                                                           id="edit-profile-grade" autocomplete="off" placeholder="Grade (ex: CGPA: 3.00/4.00)" required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <button class="btn btn-primary" type="submit" name="btb-save-education">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-experience" role="tabpanel" aria-labelledby="v-pills-experience-tab">
+                                <div class="card-header">
+                                    <div class="container">
+                                        <div class="row">
+                                            <h5>Experience</h5>
+                                        </div>
+                                        <div class="row">
+                                            <p>Please state any previous employments (with details) deemed necessary</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="card-body">
+                                        <form id="edit-profile-experience" action="/v1/employee/profile/edit/experience" method="post">
+                                            <div class="form-group row">
+                                                <label for="edit-profile-language">Experience:</label>
+                                                <div class="col-md-10">
+                                                   <textarea name="edit-profile-experience" id="edit-profile-experience" placeholder="Please state any previous employments (with details) deemed necessary"
+                                                             class="form-control">{{ ep[i].experience }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <button class="btn btn-primary" type="submit" name="btb-save-experience">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-skills" role="tabpanel" aria-labelledby="v-pills-skills-tab">
+                                <div class="card-header">
+                                    <div class="container">
+                                        <div class="row">
+                                            <h5>Skills</h5>
+                                        </div>
+                                        <div class="row">
+                                            <p>Please write down all necessary skills related to your industry</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="card-body">
+                                        <form id="edit-profile-skills" action="/v1/employee/profile/edit/skills" method="post">
+                                            <div class="form-group row">
+                                                <label for="edit-profile-skills">Skills:</label>
+                                                <div class="col-md-10">
+                                                   <textarea name="edit-profile-skills" id="edit-profile-skills" placeholder="Please write down all necessary skills related to your industry"
+                                                             class="form-control">{{ ep[i].skills }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <button class="btn btn-primary" type="submit" name="btb-save-experience">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-languages" role="tabpanel" aria-labelledby="v-pills-languages-tab">
+                                <div class="card-header">
+                                    <div class="container">
+                                        <div class="row">
+                                            <h5>Languages</h5>
+                                        </div>
+                                        <div class="row">
+                                            <p>Please only state languages that you are confident practicing</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="card-body">
+                                        <form id="edit-profile-language" action="/v1/employee/profile/edit/language" method="post">
+                                            <div class="form-group row">
+                                                <label for="edit-profile-language">Languages:</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="edit-profile-language" value="{{ ep[i].language }}"
+                                                           id="edit-profile-language" autocomplete="off" placeholder="Languages practiced (Malay, English)">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <button class="btn btn-primary" type="submit" name="btb-save-language">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v-pills-about" role="tabpanel" aria-labelledby="v-pills-about-tab">
+                                <div class="card-header">
+                                    <div class="container">
+                                        <div class="row">
+                                            <h5>About Me</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="card-body">
+                                        <form id="edit-profile-about" action="/v1/employee/profile/edit/about" method="post">
+                                            <div class="form-inline form-group row">
+                                                <label for="edit-profile-first-name">Name:</label>
+                                                <div class="col-md-3">
+                                                    <input type="text" class="form-control" name="edit-profile-first-name" value="{{ name }}"
+                                                           id="edit-profile-first-name" autocomplete="off" placeholder="First Name" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control" name="edit-profile-last-name" value="{{ last_name }}"
+                                                           id="edit-profile-last-name" autocomplete="off" placeholder="Last Name" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="edit-profile-gender">Gender:</label>
+                                                <div class="col-md-7">
+                                                    <select name="edit-profile-gender" id="edit-profile-gender" class="custom-select custom-select" style="font-size: 13px">
+                                                        <option selected>{{ ep[i].gender }}</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Male">Male</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="edit-profile-email">Email:</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="edit-profile-email" value="{{ email }}"
+                                                           id="edit-profile-email" autocomplete="off" placeholder="Email" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="edit-profile-contact-no">Contact no.:</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="edit-profile-contact-no" value="{{ contact }}"
+                                                           id="edit-profile-contact-no" autocomplete="off" placeholder="Contact number" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="edit-profile-expected-salary">Expected Salary:</label>
+                                                <div class="col-md-7 input-group mb-3 input-group-sm">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">RM</div>
+                                                    </div>
+                                                    <input type="text" class="form-control" name="edit-profile-expected-salary" value="{{ ep[i].expected_salary }}"
+                                                           id="edit-profile-expected-salary" autocomplete="off" placeholder="Expected Salary">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <button class="btn btn-primary" type="submit" name="btb-save-education">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+{% endblock %}

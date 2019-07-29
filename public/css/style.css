@@ -128,6 +128,7 @@ ol {
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: top center;
+	min-height: 100%;
 }
 
 .spad {
@@ -981,6 +982,7 @@ ol {
 	padding-left: 50px;
 	padding-right: 50px;
 	list-style: none;
+	text-align: center;
 }
 
 .footer-menu li {
@@ -1629,6 +1631,19 @@ ol {
 	font-weight: 700;
 	font-size: 36px;
 	margin-bottom: 80px;
+}
+
+
+/*------------------
+	Employer Index
+---------------------*/
+
+.lead {
+	margin: 0 auto 40px;
+}
+
+.lead p {
+	font-size: 21px;
 }
 
 /*------------------
