@@ -12,7 +12,7 @@ class EmployeeController
 
     public function __construct($session, $employee, $view, Router $router){
         $this->employee = $employee;
-        $this->view = $view;
+        //$this->view = $view;
         $this->session = $session;
         $this->db = $this->employee->getConn();
         //$this->router = $router;
@@ -129,9 +129,9 @@ class EmployeeController
 
     public function loginEmployee(Request $request, Response $response){
         try{
-            $allPostPutVars = $request->getParsedBody();
-            $email = $allPostPutVars['email'];
-            $password = $allPostPutVars['password'];
+            $user = $request->getParsedBody();
+            $email = $user['email'];
+            $password = $user['password'];
             //$email = json_decode($request->getBody())->email;
             $user = $this->employee->getInfoAssoc($email);
 
@@ -450,7 +450,7 @@ class EmployeeController
             ("SELECT vacancies.vacancy_id, vacancies.company_name, vacancies.v_name, vacancies.v_desc, vacancies.v_address, 
             vacancies.v_requirements, vacancies.v_position, vacancies.v_state, vacancies.v_salary, 
             vacancies.v_closing_date, employer_profile.* FROM vacancies INNER JOIN employer_profile on 
-            employer_profile.id = vacancies.id WHERE vacancy_id = ?");
+            employer_profile.employer_id = vacancies.employer_id WHERE vacancy_id = ?");
         $result = $sql_vacancy_details->execute(array($vacancy_id));
 
         if ($result == true) {
@@ -596,12 +596,14 @@ class EmployeeController
     }
 
     public function search(Request $request, Response $response, array $args){
-        $user = $request->getParsedBody();
-        $keyword = $user['card-job-keyword'];
+        $user = $request->getQueryParams();
+        $keyword = $user['job-keyword'];
+        //$location = $user['job-location'];
+        //$salary = $user['job-salary'];
 
         $sql_search_keyword = $this->db->prepare
-        ("SELECT * FROM vacancies WHERE v_name LIKE ? OR v_requirements LIKE ?");
-        $result = $sql_search_keyword->execute(["%$keyword%", "%$keyword%"]);
+        ("SELECT * FROM vacancies WHERE v_name LIKE ? OR v_requirements LIKE ? OR v_state LIKE ? OR v_salary LIKE ?");
+        $result = $sql_search_keyword->execute(["%$keyword%", "%$keyword%", "%$keyword%", "%$keyword%"]);
         $count = 0;
 
         if ($result == true){
@@ -609,12 +611,22 @@ class EmployeeController
                 $vacancies_search[] = $row;
                 $count++;
             }
-            try {
-                echo $this->twig->render("a_vacancies.twig", ['name' => $this->session->get('first_name'),
-                    'last_name' => $this->session->get('last_name'), 'vacancies' => $vacancies_search, 'count' => $count]);
-            } catch (\Twig\Error\LoaderError $e) {
-            } catch (\Twig\Error\RuntimeError $e) {
-            } catch (\Twig\Error\SyntaxError $e) {
+            if ($this->session->get('logged_in') == true){
+                try {
+                    echo $this->twig->render("vacancies.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'vacancies' => $vacancies_search, 'count' => $count]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+            else {
+                try {
+                    echo $this->twig->render("a_vacancies.twig", ['vacancies' => $vacancies_search, 'count' => $count]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{

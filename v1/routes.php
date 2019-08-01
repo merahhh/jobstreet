@@ -65,31 +65,39 @@ $app->group('/v1', function (App $app) {
         $app->get('/profile', EmployerController::class . ':viewProfileEmployer');
 
         #edit profile employer
-        $app->put('/profile/edit', EmployerController::class . ':editProfileEmployer');
+        $app->post('/profile/edit', EmployerController::class . ':editProfileEmployer');
 
         #add vacancy
         $app->post('/vacancy/add', EmployerController::class . ':addVacancy');
 
         #edit vacancy
-        $app->put('/vacancy/{vacancy_id}/edit', EmployerController::class . ':editVacancy');
+        $app->post('/vacancy/{vacancy_id}/edit', EmployerController::class . ':editVacancy');
 
         #delete vacancy
-        $app->delete('/vacancy/{vacancy_id}/delete', EmployerController::class . ':deleteVacancy');
+        $app->post('/vacancy/{vacancy_id}/delete', EmployerController::class . ':deleteVacancy');
 
         #view posted vacancies
         $app->get('/vacancy/all', EmployerController::class . ':viewEmployerVacancies');
 
+        #view posted vacancy details
+        $app->get('/vacancy/{vacancy_id}', EmployerController::class . ':viewFullVacancy');
+
+        #view applicants vacancy list
+        $app->get('/applicants/vacancy/all', EmployerController::class . ':viewVacanciesForApplicants');
+
         #view vacancy applicants
-        $app->get('/vacancy/{vacancy_id}/view_applicants', EmployerController::class . ':viewVacancyApplicants');
+        $app->get('/applicants/vacancy/{vacancy_id}/view', EmployerController::class . ':viewVacancyApplicants');
+
+        #set application status
+        $app->post('/applicants/vacancy/{application_id}/status', EmployerController::class . ':setApplicationStatus');
 
         #view applicant details
-        $app->get('/vacancy/{vacancy_id}/applicants/{employee_id}', EmployerController::class . ':viewApplicantDetails');
+        $app->get('/applicants/vacancy/{vacancy_id}/{employee_id}', EmployerController::class . ':viewApplicantProfile');
     });
 
     $app->group('/vacancies', function (App $app){
         #view vacancies
         $app->get('/all', EmployeeController::class . ':viewVacancies');
-        #$app->get('/view/all', Home::class . ':viewVacancies');
 
         #search vacancies
         $app->get('/search', EmployeeController::class . ':search');

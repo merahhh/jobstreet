@@ -1,0 +1,85 @@
+{% extends "e_base.twig" %}
+
+{% block title %}Jobstreet.io | No. 1 Job Posting Site{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section class="hero-section bg-color" style="padding-top: 40px">
+        {% for i in range (0,0) %}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card col-separation">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col" style="padding-top: 12px">
+                                    <h5 class="card-title">{{ applicants[i].v_name }}</h5>
+                                    <h6><a href="#" class="card-subtitle mb-2 card-link text-light-weight">
+                                            {{ applicants[i].company_name }}</a></h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col vacancy_summary">
+                                    <ul id="job_desc_summary" class="list-unstyled" style="margin-top: 5px;">
+                                        <li id="job_salary" class="job-salary">
+                                            <i class="icon fas fa-dollar-sign" style="color:green"></i>
+                                            <span>{{ applicants[i].v_salary }}</span>
+                                        </li>
+                                        <li id="job_position" class="job-position">
+                                            <i class="icon fas fa-suitcase" style="color:blue"></i>
+                                            <span>{{ applicants[i].v_position }}</span>
+                                        </li>
+                                        <li id="job_location" class="job-location">
+                                            <i class="icon fas fa-location-arrow" style="color:red"></i>
+                                            <span>{{ applicants[i].v_state }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="card-deck">
+                        <div class="card">
+                            {% for x in range(0, count-1) %}
+                            <div class="card-body">
+                                <h5 class="link-title-color" style="margin-bottom: 10px">
+                                    <a href="/v1/employer/applicants/vacancy/{{ applicants[x].vacancy_id }}/{{ applicants[x].id }}" class="card-title">
+                                        {{ applicants[x].first_name }} {{ applicants[x].last_name }}
+                                    </a>
+                                </h5>
+                                <p>{{ applicants[x].pitch }}</p>
+                                <form action="/v1/employer/applicants/vacancy/{{ applicants[x].application_id }}/status" method="post">
+                                    <div class="form-row">
+                                        <div class="form-group col-sm-7">
+                                            <select name="application_status" id="set_application_status" class="custom-select" style="font-size: 13px">
+                                                <option selected>{{ applicants[x].application_status }}</option>
+                                                <option value="Application reviewed">Application reviewed</option>
+                                                <option value="Scheduled for interview">Scheduled for interview</option>
+                                                <option value="Not suitable for this position">Not suitable for this position</option>
+                                            </select>
+                                        </div>
+                                        <div class="text-right">
+                                            <button class="btn btn-primary" type="submit" name="btn-save-application-status">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer">
+                                <i class="icon fas fa-angle-up"></i>
+                                <small class="text-muted">Date submitted: {{ applicants[i].date_submitted }}</small>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+{% endblock %}

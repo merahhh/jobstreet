@@ -1,0 +1,250 @@
+{% extends "e_base.twig" %}
+
+{% block title %}Jobstreet.io | No. 1 Job Posting Site{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section class="hero-section bg-color" style="padding-top: 40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card search-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Jobs</h5>
+                            <div class="">
+                                <button id="manage-add-job" class="btn btn-link" type="submit" data-toggle="modal"
+                                        data-target="#add-job-panel">Add a Job</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="card-deck">
+                        <div class="card">
+                            {% for i in range(0, count-1) %}
+                                <div class="card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col pl-0">
+                                                <h5 class="link-title-color" style="margin-bottom: 10px">
+                                                    <a href="/v1/employer/vacancy/{{ vacancies[i].vacancy_id }}" class="card-title">
+                                                        {{ vacancies[i].v_name }}
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                            <div class="col align-content-end text-right">
+                                                <button id="vacancy-edit-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                                        data-target="#edit-job-panel-{{ vacancies[i].vacancy_id }}">Edit</button>
+                                                <span>|</span>
+                                                <button id="vacancy-delete-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                                        data-target="#delete-job-panel-{{ vacancies[i].vacancy_id }}">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul id="job_desc_summary" class="list-unstyled" style="margin-top: 5px;">
+                                        <li id="job_salary" class="job-salary">
+                                            <i class="icon fas fa-dollar-sign"></i>
+                                            <span>MYR {{ vacancies[i].v_salary }}</span>
+                                        </li>
+                                        <li id="job_location" class="job-location">
+                                            <i class="icon fas fa-location-arrow"></i>
+                                            <span>{{ vacancies[i].v_state }}</span>
+                                        </li>
+                                    </ul>
+                                    <p class="card-text crop-text-2">{{ vacancies[i].v_desc }}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <i class="icon fas fa-angle-up"></i>
+                                    <small class="text-muted">Closing date: {{ vacancies[i].v_closing_date }}</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Add a Job Modal -->
+        <div class="modal fade" id="add-job-panel" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="row">
+                            <div class="col align-self-start">
+                                <h4 class="modal-title">Add a Vacancy</h4>
+                            </div>
+                            <div class="col position-absolute">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <form class="login-form" action="/v1/employer/vacancy/add" method="post">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="v_name">Vacancy Name:</label>
+                                    <input type="text" class="form-control" name="v_name" id="v_name" autocomplete="off"
+                                           placeholder="Vacancy Name" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="v_position">Vacancy Position:</label>
+                                    <input type="text" class="form-control" name="v_position" id="v_position" autocomplete="off"
+                                           placeholder="e.g: Min. 1 year (Junior Executive)" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="v_salary">Vacancy Salary:</label>
+                                    <div class="col-md-12 input-group pl-0 pr-0">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-size: 0.8rem">RM</div>
+                                        </div>
+                                        <input type="text" class="form-control" name="v_salary" id="v_salary" autocomplete="off"
+                                               placeholder="e.g: 3000-4500" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="v_state">Vacancy State (Location):</label>
+                                    <input type="text" class="form-control" name="v_state" id="v_state" autocomplete="off"
+                                           placeholder="e.g: Penang - Bayan Lepas" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="v_address">Vacancy Address:</label>
+                                <input type="text" class="form-control" name="v_address" id="v_address" autocomplete="off"
+                                       placeholder="e.g: 14, Tingkat Tembaga, Island Park 11600, Penang" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="v_desc">Vacancy Description:</label>
+                                <textarea type="text" class="form-control" name="v_desc" id="v_desc" autocomplete="off"
+                                          placeholder="Write down a detailed description of the job" style="font-size: 0.8rem" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="v_requirements">Vacancy Requirements:</label>
+                                <textarea type="text" class="form-control" name="v_requirements" id="v_requirements" autocomplete="off"
+                                          placeholder="Write down the necessary requirements for the job" style="font-size: 0.8rem" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="v_closing_date">Closing Date:</label>
+                                <input type="date" class="form-control" name="v_closing_date" id="v_closing_date" autocomplete="off"
+                                       required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary" name="login">Add Job</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for i in range(0, count-1) %}
+    <div class="container">
+        <!-- Edit Job Modal -->
+        <div class="modal fade" id="edit-job-panel-{{ vacancies[i].vacancy_id }}" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="row">
+                            <div class="col align-self-start">
+                                <h4 class="modal-title">Edit Vacancy Details</h4>
+                            </div>
+                            <div class="col position-absolute">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <form class="login-form" action="/v1/employer/vacancy/{{ vacancies[i].vacancy_id }}/edit" method="post">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="v_name">Vacancy Name:</label>
+                                    <input type="text" class="form-control" name="v_name" id="v_name" autocomplete="off"
+                                           value="{{ vacancies[i].v_name }}" placeholder="Vacancy Name" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="v_position">Vacancy Position:</label>
+                                    <input type="text" class="form-control" name="v_position" id="v_position" autocomplete="off"
+                                           value="{{ vacancies[i].v_position }}" placeholder="e.g: Min. 1 year (Junior Executive)" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="v_salary">Vacancy Salary:</label>
+                                    <div class="col-md-12 input-group pl-0 pr-0">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text" style="font-size: 0.8rem">RM</div>
+                                        </div>
+                                        <input type="text" class="form-control" name="v_salary" id="v_salary" autocomplete="off"
+                                               value="{{ vacancies[i].v_salary }}" placeholder="e.g: 3000-4500" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="v_state">Vacancy State (Location):</label>
+                                    <input type="text" class="form-control" name="v_state" id="v_state" autocomplete="off"
+                                           value="{{ vacancies[i].v_state }}" placeholder="e.g: Penang - Bayan Lepas" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="v_address">Vacancy Address:</label>
+                                <input type="text" class="form-control" name="v_address" id="v_address" autocomplete="off" value="{{ vacancies[i].v_address }}"
+                                       placeholder="e.g: 14, Tingkat Tembaga, Island Park 11600, Penang" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="v_desc">Vacancy Description:</label>
+                                <textarea type="text" class="form-control" name="v_desc" id="v_desc" autocomplete="off"
+                                          placeholder="Write down a detailed description of the job" style="font-size: 0.8rem" required>{{ vacancies[i].v_desc }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="v_requirements">Vacancy Requirements:</label>
+                                <textarea type="text" class="form-control" name="v_requirements" id="v_requirements" autocomplete="off"
+                                          placeholder="Write down the necessary requirements for the job" style="font-size: 0.8rem" required>{{ vacancies[i].v_requirements }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="v_closing_date">Closing Date:</label>
+                                <input type="date" class="form-control" name="v_closing_date" id="v_closing_date" autocomplete="off"
+                                       value="{{ vacancies[i].v_closing_date }}" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary" name="login">Edit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Delete Job Confirmation Modal -->
+        <div class="modal fade" id="delete-job-panel-{{ vacancies[i].vacancy_id }}" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form class="" action="/v1/employer/vacancy/{{ vacancies[i].vacancy_id }}/delete" method="post">
+                            <div class="form-group">
+                                <p>Are you sure you want to delete this job post?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary" name="login">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

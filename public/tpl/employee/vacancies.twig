@@ -14,16 +14,16 @@
                 <div class="card search-card">
                     <div class="card-body">
                         <h5 class="card-title">Search Criteria</h5>
-                        <form class="search-card" action="" method="post">
+                        <form class="search-card" action="/v1/vacancies/search" method="get">
                             <div class="form-group">
-                                <input type="text" id="card-job-keyword" class="form-control" placeholder="Job Keywords">
+                                <input type="text" name="job-keyword" id="card-job-keyword" class="form-control" placeholder="Job Keywords">
                             </div>
-                            <div class="form-group">
-                                <input type="text" id="card-job-location" class="form-control" placeholder="Location">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" id="card-job-min-salary" class="form-control" placeholder="Min. Salary (MYR)">
-                            </div>
+{#                            <div class="form-group">#}
+{#                                <input type="text" name="job-location" id="card-job-location" class="form-control" placeholder="Location">#}
+{#                            </div>#}
+{#                            <div class="form-group">#}
+{#                                <input type="text" name="job-salary" id="card-job-min-salary" class="form-control" placeholder="Min. Salary (MYR)">#}
+{#                            </div>#}
                             <button class="btn btn-primary">Search</button>
                         </form>
                     </div>
@@ -42,7 +42,7 @@
                             <ul id="job_desc_summary" class="list-unstyled" style="margin-top: 5px;">
                                 <li id="job_salary" class="job-salary">
                                     <i class="icon fas fa-dollar-sign"></i>
-                                    <span>{{ vacancies[i].v_salary }}</span>
+                                    <span>MYR {{ vacancies[i].v_salary }}</span>
                                 </li>
                                 <li id="job_location" class="job-location">
                                     <i class="icon fas fa-location-arrow"></i>
