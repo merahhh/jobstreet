@@ -132,11 +132,10 @@ class EmployeeController
             $user = $request->getParsedBody();
             $email = $user['email'];
             $password = $user['password'];
-            //$email = json_decode($request->getBody())->email;
             $user = $this->employee->getInfoAssoc($email);
 
             if ($user == null){
-                $data = 'Employee does not exist';
+                //$data = 'Employee does not exist';
                 return $response->withRedirect('/');
             }
             else{
@@ -150,13 +149,12 @@ class EmployeeController
 
                     #this is how we'll know the user is logged in
                     $this->session->set('logged_in', true);
-                    $data = 'Successfully logged in';
+                    $this->session->set('is_login', false);
                     return $response->withRedirect('/');
 
                 }
                 else{    #if password is incorrect
-                    $data = 'Incorrect password';
-                    //return $this->view->render($response, 'home.twig');
+                    //$data = 'Incorrect password';
                     return $response->withRedirect('/');
                 }
             }
@@ -407,7 +405,8 @@ class EmployeeController
     }
 
     public function viewVacancies(Request $request, Response $response){
-        $sql_view_vacancies = "SELECT vacancy_id, company_name, v_name, v_state, v_salary, v_desc, v_closing_date FROM vacancies";
+        $sql_view_vacancies = "SELECT employer_id, vacancy_id, company_name, v_name, v_state, v_salary, v_desc, 
+            v_closing_date FROM vacancies";
         $result = $this->db->query($sql_view_vacancies);
         $count = 0;
 
@@ -478,7 +477,7 @@ class EmployeeController
                 ("SELECT vacancies.vacancy_id, vacancies.company_name, vacancies.v_name, vacancies.v_desc, vacancies.v_address, 
                 vacancies.v_requirements, vacancies.v_position, vacancies.v_state, vacancies.v_salary, 
                 vacancies.v_closing_date, employer_profile.* FROM vacancies INNER JOIN employer_profile on 
-                employer_profile.id = vacancies.id WHERE vacancy_id = ?");
+                employer_profile.employer_id = vacancies.employer_id WHERE vacancy_id = ?");
             $result = $sql_vacancy_details->execute(array($vacancy_id));
 
             if ($result == true) {
@@ -516,7 +515,7 @@ class EmployeeController
             $application_id = $this->generateUniqueApplicantID();
             $vacancy_id = $args['vacancy_id'];
             $employee_id = $this->session->get('id');
-            $date_submitted = date("F d, Y");
+            $date_submitted = date("Y-m-d");
 
             $sql_apply_vacancy = $this->db->prepare
                 ("INSERT INTO vacancy_applicants (application_id, vacancy_id, id, pitch, date_submitted) VALUES 
@@ -554,11 +553,10 @@ class EmployeeController
             $sql_view_applications = $this->db->prepare
                 ("SELECT vacancy_id FROM vacancy_applicants WHERE id = ?");
             $result = $sql_view_applications->execute(array($employee_id));
-            //$vacancy_id = $sql_view_applications->fetchAll(PDO::FETCH_COLUMN);
 
             if ($result == true){
                 $sql_vacancy_info = $this->db->prepare
-                    ("SELECT vacancies.company_name, vacancies.v_name, vacancy_applicants.date_submitted, 
+                    ("SELECT vacancies.vacancy_id, vacancies.employer_id, vacancies.company_name, vacancies.v_name, vacancy_applicants.date_submitted, 
                         vacancy_applicants.application_status FROM vacancy_applicants INNER JOIN vacancies 
                         ON vacancy_applicants.vacancy_id = vacancies.vacancy_id WHERE vacancy_applicants.id = ?");
                 $result = $sql_vacancy_info->execute(array($employee_id));
@@ -567,21 +565,19 @@ class EmployeeController
                     while ($row = $sql_vacancy_info->fetch(PDO::FETCH_ASSOC)) {
                         $applications[] = $row;
                         $count++;
-                        $this->session->set('applications', $applications);
                     }
                     $this->session->set('count', $count);
-                    //return $response->withJson($applications, 200);
-                    return $response->withRedirect('/v1/employee/applications');
-//                    try {
-//                        echo $this->twig->render("applications.twig", ['name' => $this->session->get('first_name'),
-//                            'last_name' => $this->session->get('last_name'), 'applications' => $this->session->get('applications') ]);
-//                    } catch (\Twig\Error\LoaderError $e) {
-//                        echo "error";
-//                    } catch (\Twig\Error\RuntimeError $e) {
-//                        echo "error2";
-//                    } catch (\Twig\Error\SyntaxError $e) {
-//                        echo "error3";
-//                    }
+                    try {
+                        echo $this->twig->render("applications.twig", ['name' => $this->session->get('first_name'),
+                            'last_name' => $this->session->get('last_name'), 'applications' =>$applications,
+                            'count' => $count]);
+                    } catch (\Twig\Error\LoaderError $e) {
+                        echo "error";
+                    } catch (\Twig\Error\RuntimeError $e) {
+                        echo "error2";
+                    } catch (\Twig\Error\SyntaxError $e) {
+                        echo "error3";
+                    }
                 }
                 else {
                     $data = "No applications found. Apply for a job now!";
@@ -632,6 +628,37 @@ class EmployeeController
         else{
             $message = "No jobs found that match your criteria :(";
             return $response->withJson($message, 400);
+        }
+    }
+
+    public function employerProfile(Request $request, Response $response, array $args){
+        if ($this->session->get('logged_in') == true) {
+            $employer_id = $args['employer_id'];
+            $sql_get_profile = $this->db->prepare
+            ("SELECT employer_profile.*, vacancies.* FROM employer_profile INNER JOIN vacancies ON employer_profile.employer_id = 
+                vacancies.employer_id WHERE employer_profile.employer_id = ?");
+            $result = $sql_get_profile->execute([$employer_id]);
+            $count = 0;
+
+            if ($result == true) {
+                while ($row = $sql_get_profile->fetch(PDO::FETCH_ASSOC)) {
+                    $employer[] = $row;
+                    $count++;
+                }
+                try {
+                    echo $this->twig->render("employer_profile.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'employer' => $employer, 'count' => $count]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+            else {
+                $data = "No data found, edit profile now";
+            }
+        }
+        else {
+            $message = "Please log in to view this profile";
         }
     }
 }

@@ -1,0 +1,235 @@
+{% extends "base.twig" %}
+
+{% block title %}Jobstreet.io | No. 1 Job Posting Site{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section class="hero-section bg-color" style="padding-top: 40px">
+        {% for i in range(0, 0) %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card col-separation">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col offset-md-1" style="padding-top: 10px">
+                                        <h5 class="card-title">{{ employer[i].company_name }}</h5>
+                                        <i class="icon fas fa-location-arrow" style="color: red"></i>
+                                        <span>Headquarters: {{ employer[i].location }}</span>
+                                    </div>
+                                    <div class="col align-content-end text-right">
+                                        <button id="edit-profile-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                                data-target="#edit-profile-panel-{{ employer[i].id }}">Edit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card col-separation">
+                            <div class="card-body">
+                                <h2 class="title">COMPANY OVERVIEW</h2>
+                                <div id="employer_company_overview" class="text-justify vacancy-details-small pre-wrap-text">
+                                    {{ employer[i].background }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card col-separation">
+                            <div class="card-body">
+                                <h2 class="title">COMPANY SNAPSHOT</h2>
+                                <div id="company-snapshot" class="text-justify vacancy-details-small">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div>
+                                                <strong>Website:</strong>
+                                            </div>
+                                            <div class="vacancy-details-body vacancy-details-small">
+                                                <a href="http://{{ vacancy_details[i].company_website }}">
+                                                    {{ employer[i].company_website }}</a>
+                                            </div>
+                                            <div>
+                                                <strong>Company Benefits:</strong>
+                                            </div>
+                                            <div class="vacancy-details-body vacancy-details-small">
+                                                {{ employer[i].company_benefits }}
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div>
+                                                <strong>Company Work Hours:</strong>
+                                            </div>
+                                            <div class="vacancy-details-body vacancy-details-small">
+                                                {{ employer[i].company_work_hours }}
+                                            </div>
+                                            <div>
+                                                <strong>Company Size:</strong>
+                                            </div>
+                                            <div class="vacancy-details-body vacancy-details-small">
+                                                {{ employer[i].company_size }} Employees
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div>
+                                                <strong>Spoken Language:</strong>
+                                            </div>
+                                            <div class="vacancy-details-body vacancy-details-small">
+                                                {{ employer[i].spoken_language }}
+                                            </div>
+                                            <div>
+                                                <strong>Company Dress Code:</strong>
+                                            </div>
+                                            <div class="vacancy-details-body vacancy-details-small">
+                                                {{ employer[i].dress_code }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card col-separation">
+                            <div class="card-body">
+                                <h2 class="title">APPLY FOR OPEN POSITIONS</h2>
+                                <div id="employer_company_overview" class="text-justify vacancy-details-small">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="card-deck">
+                                                    {% for x in range(0, count-1) %}
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <h5 class="link-title-color" style="margin-bottom: 10px">
+                                                                    <a href="/v1/employer/vacancy/{{ employer[x].vacancy_id }}" class="card-title">
+                                                                        {{ employer[x].v_name }}
+                                                                    </a>
+                                                                </h5>
+                                                                <h6><a href="#" class="card-subtitle mb-2 card-link">{{ employer[x].company_name }}</a></h6>
+                                                                <ul id="job_desc_summary" class="list-unstyled" style="margin-top: 5px;">
+                                                                    <li id="job_position" class="job-position">
+                                                                        <i class="icon fas fa-suitcase"></i>
+                                                                        <span>{{ employer[x].v_position }}</span>
+                                                                    </li>
+                                                                    <li id="job_salary" class="job-salary">
+                                                                        <i class="icon fas fa-dollar-sign" style="font-size: 20px"></i>
+                                                                        <span>MYR {{ employer[x].v_salary }}</span>
+                                                                    </li>
+                                                                    <li id="job_location" class="job-location">
+                                                                        <i class="icon fas fa-location-arrow"></i>
+                                                                        <span>{{ employer[x].v_state }}</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+
+    {% for i in range(0, 0) %}
+        <div class="container">
+            <!-- Edit Profile Modal -->
+            <div class="modal fade" id="edit-profile-panel-{{ employer[i].id }}" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="row">
+                                <div class="col align-self-start">
+                                    <h4 class="modal-title">Edit Profile</h4>
+                                </div>
+                                <div class="col position-absolute">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <form class="login-form" action="/v1/employer/profile/edit" method="post">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="company_name">Company Name:</label>
+                                        <input type="text" class="form-control" name="company_name" id="company_name" autocomplete="off"
+                                               value="{{ company_name }}" placeholder="Company Name" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="location">Headquarters Location:</label>
+                                        <input type="text" class="form-control" name="location" id="location" autocomplete="off"
+                                               value="{{ employer[i].location }}" placeholder="e.g: Kuala Lumpur" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="company_website">Company Website:</label>
+                                        <input type="text" class="form-control" name="company_website" id="company_website" autocomplete="off"
+                                               value="{{ employer[i].company_website }}" placeholder="Company Website" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="company_size">Company Size:</label>
+                                        <input type="text" class="form-control" name="company_size" id="company_size" autocomplete="off"
+                                               value="{{ employer[i].company_size }}" placeholder="e.g: 50-100" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="company_benefits">Company Benefits:</label>
+                                    <input type="text" class="form-control" name="company_benefits" id="company_benefits" autocomplete="off" value="{{ employer[i].company_benefits }}"
+                                           placeholder="e.g: Attractive Benefit Package, Dental, Education support, Loans, Medical, Miscellaneous allowance, Sports (e.g. Gym), Vision" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="company_work_hours">Company Work Hours:</label>
+                                    <input type="text" class="form-control" name="company_work_hours" id="company_work_hours" autocomplete="off"
+                                           value="{{ employer[i].company_work_hours }}"  placeholder="e.g: Regular hours, Mondays - Fridays" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="spoken_language">Spoken Language:</label>
+                                    <input type="text" class="form-control" name="spoken_language" id="spoken_language" autocomplete="off"
+                                           value="{{ employer[i].spoken_language }}"  placeholder="e.g: English" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dress_code">Company Work Hours:</label>
+                                    <input type="text" class="form-control" name="dress_code" id="dress_code" autocomplete="off"
+                                           value="{{ employer[i].dress_code }}"  placeholder="e.g: Formal (e.g. Shirts + Ties)" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="background">Company Overview/Background:</label>
+                                    <textarea type="text" class="form-control" name="background" id="background" autocomplete="off" rows="9"
+                                              placeholder="Explain in detail the mission, vision and brief history of the company" style="font-size: 0.8rem" required>{{ employer[i].background }}</textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" name="login">Edit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

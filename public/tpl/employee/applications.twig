@@ -3,6 +3,7 @@
 {% block title %}Jobstreet | About Us{% endblock %}
 
 {% block head %}
+    <link rel="stylesheet" href="/css/style.css">
     {{ parent() }}
 {% endblock %}
 
@@ -27,7 +28,8 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active" id="active-app" role="tabpanel" aria-labelledby="active-app-tab">
                         {% for i in range(0, count-1) %}
-                            <h6 class="card-title">{{ applications[i].v_name }} ({{ applications[i].company_name }})</h6>
+                            <h6><a href="/v1/vacancies/{{ applications[i].vacancy_id }}" class="card-title">{{ applications[i].v_name }}</a>
+                                (<a href="/v1/employee/vacancies/profile/{{ applications[i].employer_id }}">{{ applications[i].company_name }}</a>)</h6>
                             <div class="row">
                                 <p class="card-text col-md-3">
                                     <b>Date Submitted</b>
@@ -49,8 +51,8 @@
                     </div>
                     <div class="tab-pane fade" id="all-app" role="tabpanel" aria-labelledby="all-app-tab">
                         {% for i in range(0, count-1) %}
-                            <h6 class="card-title">{{ applications[i].v_name }}
-                                (<a href="#">{{ applications[i].company_name }}</a>)</h6>
+                            <h6><a href="/v1/vacancies/{{ applications[i].vacancy_id }}" class="card-title">{{ applications[i].v_name }}</a>
+                                (<a href="/v1/employee/vacancies/profile/{{ applications[i].employer_id }}">{{ applications[i].company_name }}</a>)</h6>
                             <div class="row">
                                 <p class="card-text col-md-3">
                                     <b>Date Submitted</b>

@@ -25,7 +25,9 @@ class Home
     public function index(){
         if ($this->session->get('logged_in') == true){
             try {
-                echo $this->twig_user->render("home.twig", ['name' => $this->session->get('first_name')]);
+                echo $this->twig_user->render("home.twig", ['name' => $this->session->get('first_name'),
+                    'is_login' => $this->session->get('is_login'), 'email_exist' => $this->session->get('email_exist'),
+                    'correct_pw' => $this->session->get('correct_pw')]);
             } catch (\Twig\Error\LoaderError $e) {
             } catch (\Twig\Error\RuntimeError $e) {
             } catch (\Twig\Error\SyntaxError $e) {
@@ -33,25 +35,12 @@ class Home
         }
         else {
             try {
-                echo $this->twig_user->render("a_index.twig");
+                echo $this->twig_user->render("a_index.twig", ['is_login' => $this->session->get('is_login'), 'email_exist' => $this->session->get('email_exist'),
+                    'correct_pw' => $this->session->get('correct_pw')]);
             } catch (\Twig\Error\LoaderError $e) {
             } catch (\Twig\Error\RuntimeError $e) {
             } catch (\Twig\Error\SyntaxError $e) {
             }
-        }
-    }
-
-    public function applications(){
-        try {
-            echo $this->twig_user->render("applications.twig", ['name' => $this->session->get('first_name'),
-                'last_name' => $this->session->get('last_name'), 'applications' => $this->session->get('applications'),
-                'count' => $this->session->get('count')]);
-        } catch (\Twig\Error\LoaderError $e) {
-            echo "error";
-        } catch (\Twig\Error\RuntimeError $e) {
-            echo "error2";
-        } catch (\Twig\Error\SyntaxError $e) {
-            echo "error3";
         }
     }
 
@@ -91,27 +80,6 @@ class Home
         }
     }
 
-//    public function viewVacancies(){
-//        if ($this->session->get('logged_in') == true){
-//            try {
-//                echo $this->twig_user->render("vacancies.twig", ['name' => $this->session->get('first_name'),
-//                    'last_name' => $this->session->get('last_name'), 'vacancies' => $this->session->get('vacancies'),
-//                    'count' => $this->session->get('count')]);
-//            } catch (\Twig\Error\LoaderError $e) {
-//            } catch (\Twig\Error\RuntimeError $e) {
-//            } catch (\Twig\Error\SyntaxError $e) {
-//            }
-//        }
-//        else {
-//            try {
-//                echo $this->twig_user->render("a_vacancies.twig", ['vacancies' => $this->session->get('vacancies'),
-//                    'count' => $this->session->get('count')]);
-//            } catch (\Twig\Error\LoaderError $e) {
-//            } catch (\Twig\Error\RuntimeError $e) {
-//            } catch (\Twig\Error\SyntaxError $e) {
-//            }
-//        }
-//    }
     public function editProfileEmployee(){
         if ($this->session->get('logged_in') == true){
             try {

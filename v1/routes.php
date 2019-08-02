@@ -40,9 +40,12 @@ $app->group('/v1', function (App $app) {
         $app->get('/vacancies/{vacancy_id}/application', EmployeeController::class . ':vacancyApplication');
         //$app->get('/vacancies/apply', Home::class . ':applyVacancy');
 
+        #view company profile
+        $app->get('/vacancies/profile/{employer_id}', EmployeeController::class . ':employerProfile');
+
         #view job applications
         $app->get('/profile/vacancies_applied', EmployeeController::class . ':viewApplications');
-        $app->get('/applications', Home::class . ':applications');
+        $app->get('/applications', EmployeeController::class . ':viewApplications');
 
         #logout employee
         $app->post('/logout', EmployeeController::class . ':logoutEmployee');
