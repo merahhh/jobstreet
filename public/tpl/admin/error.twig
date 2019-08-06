@@ -1,0 +1,45 @@
+{% extends "a_base.twig" %}
+
+{% block title %}
+    Jobstreet.io
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    <header class="header-section">
+        <div class="header-warp">
+            <div class="container">
+                <div class="row">
+                    <div class="main-menu col align-self-start">
+                        <li><a href="/v1/admin/">Home</a></li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block section %}
+    <section class="hero-section bg-color" style="padding-top: 40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col" style="padding-top: 12px">
+                                    <h5 class="card-title">Please Log In To Continue</h5>
+                                    <p><a href="/v1/admin/">Go to home page</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

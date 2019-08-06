@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="This is a test project developed to enhance my web development skills. This is
+            influenced by Jobstreet.com which is the no. 1 recruitment site in Malaysia with over 29,000 vacancies to find
+            your next career opportunity.">
+        <!-- Stylesheets -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+        <!--<link rel="stylesheet" href="../css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../../css/style.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <!-- Google font -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
+
+        <!-- Icons -->
+        <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
+              integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% endblock %}
+</head>
+<body>
+{% block header %}
+    <header class="header-section">
+        <div class="header-warp">
+            <div class="container">
+                <div class="row">
+                    <div class="main-menu col col-sm-8 align-self-start">
+                        <li><a href="/v1/admin/">Home</a></li>
+                        <li><a href="/v1/admin/vacancies">Manage Jobs</a></li>
+                        <li><a href="/v1/admin/employers">Manage Employers</a></li>
+                        <li><a href="/v1/admin/employees">Manage Candidates</a></li>
+                    </div>
+                    <div class="user-panel col align-self-end text-right">
+                        <form method="post" action="/v1/admin/logout">
+                            Hello, Admin {{ name }}! <button id="header-logout-btn" class="btn btn-link">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+<section id="section">{% block section %}{% endblock %}</section>
+
+</body>
+<footer class="footer-section">
+    {% block footer %}
+        <div class="container">
+            <div class="footer-bottom align-items-center">
+                <ul class="footer-menu align-self-center">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="#">Getting Started</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Send Feedback</a></li>
+                    <li><a href="#">Work With Us</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-white text-center">
+                        Copyright © 2019 All Rights Reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+</footer>
+</html>

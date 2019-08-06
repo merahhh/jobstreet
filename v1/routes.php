@@ -49,6 +49,9 @@ $app->group('/v1', function (App $app) {
 
         #logout employee
         $app->post('/logout', EmployeeController::class . ':logoutEmployee');
+
+        #error page
+        $app->get('/error', EmployeeController::class . ':error');
     });
 
     $app->group('/employer', function (App $app){
@@ -107,6 +110,59 @@ $app->group('/v1', function (App $app) {
 
         #view vacancy details
         $app->get('/{vacancy_id}', EmployeeController::class . ':viewFullVacancy');
+    });
+
+    $app->group('/admin', function (App $app){
+        #index
+        $app->get('/', AdminController::class . ':index');
+
+        #error
+        $app->get('/error', AdminController::class . ':error');
+
+        #register
+        $app->post('/register', AdminController::class . ':registerAdmin');
+
+        #login admin
+        $app->post('/login', AdminController::class . ':loginAdmin');
+
+        #logout admin
+        $app->post('/logout', AdminController::class . ':logoutAdmin');
+
+        #view vacancies
+        $app->get('/vacancies', AdminController::class . ':viewAllVacancies');
+
+        #search vacancies
+        $app->get('/vacancies/search', AdminController::class . ':searchVacancies');
+
+        #view vacancy details
+        $app->get('/vacancies/{vacancy_id}', AdminController::class . ':viewVacancyDetails');
+
+        #delete vacancies
+        $app->post('/vacancies/{vacancy_id}/delete', AdminController::class . ':deleteVacancy');
+
+        #view employers
+        $app->get('/employers', AdminController::class . ':viewAllEmployers');
+
+        #search employer
+        $app->get('/employers/search', AdminController::class . ':searchEmployers');
+
+        #view employer profile
+        $app->get('/employers/{employer_id}', AdminController::class . ':viewEmployerProfile');
+
+        #delete employer
+        $app->post('/employers/{employer_id}/delete', AdminController::class . ':deleteEmployer');
+
+        #view employees
+        $app->get('/employees', AdminController::class . ':viewAllEmployees');
+
+        #search employee
+        $app->get('/employees/search', AdminController::class . ':searchEmployees');
+
+        #view employee profile
+        $app->get('/employees/{employee_id}', AdminController::class . ':viewEmployeeProfile');
+
+        #delete employee
+        $app->post('/employees/{employee_id}/delete', AdminController::class . ':deleteEmployee');
     });
 });
 

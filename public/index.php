@@ -3,14 +3,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-use Slim\Router;
 use utility\Session;
 require_once dirname(__FILE__) . "/../v1/model/Employee.php";
 require_once dirname(__FILE__) . "/../v1/model/Employer.php";
+require_once dirname(__FILE__) . "/../v1/model/Admin.php";
 require_once dirname(__FILE__) . "/../v1/library/Session.php";
 require_once dirname(__FILE__) . "/../v1/controller/Home.php";
 require_once dirname(__FILE__) . "/../v1/controller/EmployeeController.php";
 require_once dirname(__FILE__) . "/../v1/controller/EmployerController.php";
+require_once dirname(__FILE__) . "/../v1/controller/AdminController.php";
 require '../vendor/autoload.php';
 
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__);
@@ -35,6 +36,11 @@ $container['Employer'] = function () {
     return $employer;
 };
 
+$container['Admin'] = function () {
+    $admin = new Admin();
+    return $admin;
+};
+
 $container['Home'] = function ($container) {
     $session = $container->get('Session');
     $view = $container->get('View');
@@ -42,12 +48,20 @@ $container['Home'] = function ($container) {
     return $home;
 };
 
+$container['AdminController'] = function ($container) {
+    $admin = $container->get('Admin');
+    $session = $container->get('Session');
+    $employee = $container->get('Employee');
+    $employer = $container->get('Employer');
+    $admin_controller = new AdminController($session, $admin, $employee, $employer);
+    return $admin_controller;
+};
+
 $container['EmployeeController'] = function ($container) {
     $session = $container->get('Session');
     $employee = $container->get('Employee');
     $view = $container->get('View');
-    $router = new Router();
-    $employee_controller = new EmployeeController($session, $employee, $view, $router);
+    $employee_controller = new EmployeeController($session, $employee, $view);
     return $employee_controller;
 };
 

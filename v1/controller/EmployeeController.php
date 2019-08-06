@@ -10,12 +10,10 @@ class EmployeeController
 {
     protected $employee, $session, $db, $view, $router, $twig;
 
-    public function __construct($session, $employee, $view, Router $router){
+    public function __construct($session, $employee, $view){
         $this->employee = $employee;
-        //$this->view = $view;
         $this->session = $session;
         $this->db = $this->employee->getConn();
-        //$this->router = $router;
         $loader = new FilesystemLoader(__DIR__ . '/../../public/tpl/employee');
         $this->twig = new Environment($loader, ['debug' => true]);
         $this->twig->addExtension(new \Twig\Extension\DebugExtension());
@@ -117,7 +115,7 @@ class EmployeeController
                 else{
                     $message = "User not registered";
                     //return $response->withJson($message, 500);
-                    return $response->withRedirect('');
+                    return $response->withRedirect('/');
                 }
             }
         }
@@ -213,7 +211,6 @@ class EmployeeController
             if ($result == true) {
                 while ($row = $sql_get_profile->fetch(PDO::FETCH_ASSOC)) {
                     $data[] = $row;
-                    //echo json_encode($data);
                     $this->session->set('employee_profile', $data);
                 }
                 try {
@@ -232,7 +229,7 @@ class EmployeeController
         }
         else {
             $message = "Please log in to view this profile";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -269,7 +266,7 @@ class EmployeeController
         }
         else{
             $message = "Please log in to edit your profile";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -300,7 +297,7 @@ class EmployeeController
         }
         else{
             $message = "Please log in to edit your profile";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -331,7 +328,7 @@ class EmployeeController
         }
         else{
             $message = "Please log in to edit your profile";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -362,7 +359,7 @@ class EmployeeController
         }
         else{
             $message = "Please log in to edit your profile";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -400,7 +397,7 @@ class EmployeeController
         }
         else{
             $message = "Please log in to edit your profile";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -444,7 +441,6 @@ class EmployeeController
 
     public function viewFullVacancy(Request $request, Response $response, array $args){
         $vacancy_id = $args['vacancy_id'];
-
         $sql_vacancy_details = $this->db->prepare
             ("SELECT vacancies.vacancy_id, vacancies.company_name, vacancies.v_name, vacancies.v_desc, vacancies.v_address, 
             vacancies.v_requirements, vacancies.v_position, vacancies.v_state, vacancies.v_salary, 
@@ -504,7 +500,7 @@ class EmployeeController
         }
         else {      //if not logged in
             $message = "Please log in to apply for this job";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -542,7 +538,7 @@ class EmployeeController
         }
         else {
             $message = "Please log in to apply for this job";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -587,7 +583,7 @@ class EmployeeController
         }
         else {
             $message = "Please log in to view your job applications";
-            return $response->withJson($message, 403);
+            return $response->withRedirect('/v1/employee/error');
         }
     }
 
@@ -659,6 +655,16 @@ class EmployeeController
         }
         else {
             $message = "Please log in to view this profile";
+            return $response->withRedirect('/v1/employee/error');
+        }
+    }
+
+    public function error(Request $request, Response $response){
+        try {
+            echo $this->twig->render("error.twig");
+        } catch (\Twig\Error\LoaderError $e) {
+        } catch (\Twig\Error\RuntimeError $e) {
+        } catch (\Twig\Error\SyntaxError $e) {
         }
     }
 }

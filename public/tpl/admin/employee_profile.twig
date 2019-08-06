@@ -1,0 +1,112 @@
+{% extends "a_base.twig" %}
+
+{% block title %}Jobstreet.io | No. 1 Job Posting Site{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/style.css">
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section class="hero-section bg-color" style="padding-top: 40px">
+        {% for i in range (0,0) %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col align-self-start">
+                                        <h5>{{ employee_profile[i].first_name }} {{ employee_profile[i].last_name }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">About Me</h6>
+                                <div class="row">
+                                    <p class="card-text col-md-3">
+                                        <b>Gender</b>
+                                    </p>
+                                    <p class="card-text col-md-2 offset-md-2">
+                                        {{ employee_profile[i].gender }}
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <p class="card-text col-md-3">
+                                        <b>Age</b>
+                                    </p>
+                                    <p class="card-text col-md-2 offset-md-2">
+                                        {{ employee_profile[i].age }} years
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <p class="card-text col-md-3">
+                                        <b>Nationality</b>
+                                    </p>
+                                    <p class="card-text col-md-2 offset-md-2">
+                                        {{ employee_profile[i].nationality }}
+                                    </p>
+                                </div>
+                                <hr class="horizontal-line">
+
+
+                                <h6 class="card-title">Education</h6>
+                                <div class="row">
+                                    <p class="card-text col-md-3">
+                                        <b>{{ employee_profile[i].grad_month }} {{ employee_profile[i].grad_year }}</b>
+                                    </p>
+                                    <p class="card-text col-md-6 offset-md-2">
+                                        {{ employee_profile[i].qualification }} in {{ employee_profile[i].major }}
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <p class="card-text col-md-3">
+                                    </p>
+                                    <p class="card-text col-md-6 offset-md-2">
+                                        {{ employee_profile[i].institute }}
+                                    </p>
+                                </div>
+
+                                <hr class="horizontal-line">
+                                <h6 class="card-title">Experience</h6>
+                                <p class="card-text">
+                                    {{ employee_profile[i].experience }}
+                                </p>
+                                <hr class="horizontal-line">
+                                <h6 class="card-title">Skills</h6>
+                                <p class="card-text">
+                                    {{ employee_profile[i].skills }}
+                                </p>
+                                <hr class="horizontal-line">
+                                <h6 class="card-title">Languages</h6>
+                                <p class="card-text">
+                                    {{ employee_profile[i].language }}
+                                </p>
+                                <hr class="horizontal-line">
+                                <h6 class="card-title">Additional Info</h6>
+                                <div class="row">
+                                    <p class="card-text col-md-3">
+                                        <b>Expected Salary</b>
+                                    </p>
+                                    <p class="card-text col-md-6 offset-md-2">
+                                        RM {{ employee_profile[i].expected_salary }}
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <p class="card-text col-md-3">
+                                        <b>Preferred Work Location</b>
+                                    </p>
+                                    <p class="card-text col-md-6 offset-md-2">
+                                        {{ employee_profile[i].location }}
+                                    </p>
+                                    <p class="card-text col align-self-end"></p>
+                                </div>
+                                <hr class="horizontal-line">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

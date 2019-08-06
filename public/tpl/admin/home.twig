@@ -1,0 +1,25 @@
+{% extends "a_base.twig" %}
+
+{% block title %}Jobstreet.io | This is an index test page{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section class="hero-section set-bg bg-overlay" style="background-image: url('../../img/klcc.jpg');">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="hero-text text-white">
+                        <h2>Jobstreet</h2>
+                        <p> This is a test project developed to enhance my web development skills. This is
+                            influenced by Jobstreet.com which is the no. 1 recruitment site in Malaysia with over
+                            29,000 vacancies to find your next career opportunity.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
