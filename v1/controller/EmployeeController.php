@@ -28,20 +28,6 @@ class EmployeeController
     public function generateUniqueEmployeeID($len = 5){
         $randomString = substr(MD5(time()),$len);
         return $randomString;
-
-        //Check newly generated Code exist in DB table or not.
-//        $query = $this->db->prepare("SELECT * FROM employee WHERE id = ?");
-//        $query->execute(array($randomString));
-//        $resultCount = count($query->fetchAll());
-//
-//        if($resultCount > 0){
-//            //IF code is already exist then function will call it self until unique code has been generated and inserted in Db.
-//            $this->generateRandomNumber();
-//        }
-//        else{
-//            //Unique generated code will be inserted in DB.
-//            return $randomString;
-//        }
     }
 
     public function generateUniqueEducationID($len = 8){
@@ -70,8 +56,12 @@ class EmployeeController
             #we know user email exists if the rows returned are > 0
             if ($result != null){
                 $message = "User with that email exists";
-                //return $response->withJson($message, 501);
-                return $response->withRedirect('/');
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
             else {   #email doesn't already exist in DB, proceed
                 $password = password_hash($password, PASSWORD_BCRYPT);
@@ -97,31 +87,47 @@ class EmployeeController
                         if ($result_education == true){
                             $this->session->set('active', 1);
                             $message = "User account created successfully";
-                            //return $response->withJson($message, 201);
                             return $response->withRedirect('/');
                         }
                         else {
-                            $message = "Profile education ID error";
-                            //return $response->withJson($message, 400);
-                            return $response->withRedirect('/');
+                            $message = "Profile education ID error.";
+                            try {
+                                echo $this->twig->render("page_error.twig", ['message' => $message]);
+                            } catch (\Twig\Error\LoaderError $e) {
+                            } catch (\Twig\Error\RuntimeError $e) {
+                            } catch (\Twig\Error\SyntaxError $e) {
+                            }
                         }
                     }
                     else {
-                        $message = "Profile ID error";
-                        //return $response->withJson($message, 400);
-                        return $response->withRedirect('/');
+                        $message = "Profile ID error.";
+                        try {
+                            echo $this->twig->render("page_error.twig", ['message' => $message]);
+                        } catch (\Twig\Error\LoaderError $e) {
+                        } catch (\Twig\Error\RuntimeError $e) {
+                        } catch (\Twig\Error\SyntaxError $e) {
+                        }
                     }
                 }
                 else{
-                    $message = "User not registered";
-                    //return $response->withJson($message, 500);
-                    return $response->withRedirect('/');
+                    $message = "Error, user not registered!";
+                    try {
+                        echo $this->twig->render("page_error.twig", ['message' => $message]);
+                    } catch (\Twig\Error\LoaderError $e) {
+                    } catch (\Twig\Error\RuntimeError $e) {
+                    } catch (\Twig\Error\SyntaxError $e) {
+                    }
                 }
             }
         }
         else{
-            $message = "Invalid email";
-            return $response->withJson($message, 400);
+            $message = "Invalid email entered!";
+            try {
+                echo $this->twig->render("page_error.twig", ['message' => $message]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
     }
 
@@ -133,8 +139,16 @@ class EmployeeController
             $user = $this->employee->getInfoAssoc($email);
 
             if ($user == null){
-                //$data = 'Employee does not exist';
-                return $response->withRedirect('/');
+                $data = 'Employee with that email does not exist.';
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                    echo "a";
+                } catch (\Twig\Error\RuntimeError $e) {
+                    echo "b";
+                } catch (\Twig\Error\SyntaxError $e) {
+                    echo "c";
+                }
             }
             else{
                 if (password_verify($password, $user['password'])){    #if password is correct
@@ -152,14 +166,24 @@ class EmployeeController
 
                 }
                 else{    #if password is incorrect
-                    //$data = 'Incorrect password';
-                    return $response->withRedirect('/');
+                    $data = 'Incorrect password entered!';
+                    try {
+                        echo $this->twig->render("page_error.twig", ['message' => $data]);
+                    } catch (\Twig\Error\LoaderError $e) {
+                    } catch (\Twig\Error\RuntimeError $e) {
+                    } catch (\Twig\Error\SyntaxError $e) {
+                    }
                 }
             }
         }
         catch (exception $e){
             $data = 'Oops, something went wrong!';
-            return $response->withRedirect('/');
+            try {
+                echo $this->twig->render("page_error.twig", ['message' => $data]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
     }
 
@@ -186,25 +210,28 @@ class EmployeeController
             session_destroy();
             $this->session->set('logged_in', false);
             //$this->session->destroySession();
-            $message = 'Successfully logged out!';
-            //return $response->withJson($message, 200);
             return $response->withRedirect('/');
 
         } catch (exception $e){
             $data = 'Oops, something went wrong!';
-            return $response->withJson($data, 300);
+            try {
+                echo $this->twig->render("page_error.twig", ['message' => $data]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
     }
 
     public function viewProfileEmployee(Request $request, Response $response){
         if ($this->session->get('logged_in') == true) {
             $sql_get_profile = $this->db->prepare
-                ("SELECT employee_profile.gender, employee_profile.age, employee_profile.nationality, 
-                employee_profile.experience, employee_profile.skills, employee_profile.language,
-                employee_profile.expected_salary, employee_profile.location, employee_education.institute, 
-                employee_education.grad_month, employee_education.grad_year, employee_education.qualification, employee_education.major,
+                ("SELECT employee_profile.gender, employee_profile.experience, employee_profile.skills, 
+                employee_profile.language, employee_profile.expected_salary, employee_profile.location, 
+                employee_education.institute, employee_education.grad_month, employee_education.grad_year, 
+                employee_education.qualification, employee_education.major,
                 employee_education.grade FROM employee_profile INNER JOIN employee_education ON 
-                employee_profile.education_id = employee_education.education_id WHERE employee_profile.id = ?");
+                employee_profile.education_id = employee_education.education_id WHERE employee_profile.id = ? ");
             $result = $sql_get_profile->execute(array($this->session->get('id')));
             //$result = $this->db->query($sql_get_profile);
 
@@ -216,19 +243,23 @@ class EmployeeController
                 try {
                     echo $this->twig->render("profile.twig", ['name' => $this->session->get('first_name'),
                         'last_name' => $this->session->get('last_name'), 'ep' => $this->session->get('employee_profile'),
-                        'id' => $this->session->get('id')]);
+                        'id' => $this->session->get('id'), 'email' => $this->session->get('email')]);
                 } catch (\Twig\Error\LoaderError $e) {
                 } catch (\Twig\Error\RuntimeError $e) {
                 } catch (\Twig\Error\SyntaxError $e) {
                 }
             }
             else {
-                $data = "No data found, edit profile now";
-                return $response->withJson($data, 400);
+                $data = "No data found, edit profile now.";
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
-            $message = "Please log in to view this profile";
             return $response->withRedirect('/v1/employee/error');
         }
     }
@@ -260,12 +291,16 @@ class EmployeeController
                 }
             }
             else{
-                $message = "Unable to edit education";
-                return $response->withJson($message, 500);
+                $message = "Unable to edit education.";
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to edit your profile";
             return $response->withRedirect('/v1/employee/error');
         }
     }
@@ -291,12 +326,16 @@ class EmployeeController
                 }
             }
             else{
-                $message = "Unable to edit experience";
-                return $response->withJson($message, 500);
+                $message = "Unable to edit experience.";
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to edit your profile";
             return $response->withRedirect('/v1/employee/error');
         }
     }
@@ -322,12 +361,16 @@ class EmployeeController
                 }
             }
             else{
-                $message = "Unable to edit skills";
-                return $response->withJson($message, 500);
+                $message = "Unable to edit skills.";
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to edit your profile";
             return $response->withRedirect('/v1/employee/error');
         }
     }
@@ -353,12 +396,16 @@ class EmployeeController
                 }
             }
             else{
-                $message = "Unable to edit language";
-                return $response->withJson($message, 500);
+                $message = "Unable to edit language.";
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to edit your profile";
             return $response->withRedirect('/v1/employee/error');
         }
     }
@@ -372,13 +419,15 @@ class EmployeeController
             $email = $user['edit-profile-email'];
             $contact = $user['edit-profile-contact-no'];
             $expected_salary = $user['edit-profile-expected-salary'];
+            $work_location = $user['edit-profile-work-location'];
             $id = $this->session->get('id');
 
             $sql_edit_education = $this->db->prepare
             ("UPDATE employee, employee_profile SET employee.first_name = ?, employee.last_name = ?, employee.email = ?, 
-                employee.contact = ?, employee_profile.gender = ?, employee_profile.expected_salary = ?
-                WHERE employee.id = employee_profile.id AND employee_profile.id = ?");
-            $result = $sql_edit_education->execute([$first_name, $last_name, $email, $contact, $gender, $expected_salary, $id ]);
+                employee.contact = ?, employee_profile.gender = ?, employee_profile.expected_salary = ?, 
+                employee_profile.location = ? WHERE employee.id = employee_profile.id AND employee_profile.id = ?");
+            $result = $sql_edit_education->execute([$first_name, $last_name, $email, $contact, $gender, $expected_salary,
+                $work_location, $id ]);
 
             if ($result == true){
                 try {
@@ -391,19 +440,24 @@ class EmployeeController
                 }
             }
             else{
-                $message = "Unable to edit about me";
-                return $response->withJson($message, 500);
+                $message = "Unable to edit about me.";
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to edit your profile";
             return $response->withRedirect('/v1/employee/error');
         }
     }
 
     public function viewVacancies(Request $request, Response $response){
+        $this->checkVacanciesExpiryDate($request, $response);
         $sql_view_vacancies = "SELECT employer_id, vacancy_id, company_name, v_name, v_state, v_salary, v_desc, 
-            v_closing_date FROM vacancies";
+            v_closing_date FROM vacancies WHERE v_status = 1";
         $result = $this->db->query($sql_view_vacancies);
         $count = 0;
 
@@ -412,7 +466,7 @@ class EmployeeController
                 $vacancies[] = $row;
                 $count++;
             }
-//            return $response->withRedirect('/v1/vacancies/all');
+
             if ($this->session->get('logged_in') == true){
                 try {
                     echo $this->twig->render("vacancies.twig", ['name' => $this->session->get('first_name'),
@@ -434,8 +488,13 @@ class EmployeeController
             }
         }
         else {
-            $data = "No jobs found";
-            return $response->withJson($data, 400);
+            $data = "No jobs found.";
+            try {
+                echo $this->twig->render("page_error.twig", ['message' => $data]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
     }
 
@@ -452,17 +511,33 @@ class EmployeeController
             while ($row = $sql_vacancy_details->fetch(PDO::FETCH_ASSOC)) {
                 $vacancy_details[] = $row;
             }
+            if ($this->session->get('logged_in') == true){
+                try {
+                    echo $this->twig->render("vacancy_details.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'vacancy_details' => $vacancy_details]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+            else {
+                try {
+                    echo $this->twig->render("a_vacancy_details.twig", ['name' => $this->session->get('first_name'),
+                        'last_name' => $this->session->get('last_name'), 'vacancy_details' => $vacancy_details]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
+            }
+        }
+        else {
+            $data = "No data found for this job.";
             try {
-                echo $this->twig->render("vacancy_details.twig", ['name' => $this->session->get('first_name'),
-                    'last_name' => $this->session->get('last_name'), 'vacancy_details' => $vacancy_details]);
+                echo $this->twig->render("page_error.twig", ['message' => $data]);
             } catch (\Twig\Error\LoaderError $e) {
             } catch (\Twig\Error\RuntimeError $e) {
             } catch (\Twig\Error\SyntaxError $e) {
             }
-        }
-        else {
-            $data = "No data found for this job";
-            return $response->withJson($data, 400);
         }
     }
 
@@ -491,15 +566,18 @@ class EmployeeController
                 } catch (\Twig\Error\SyntaxError $e) {
                     echo "error3";
                 }
-//            return $response->withRedirect('/v1/employee/vacancies/$vacancy_id/application');
             }
             else {      //query failed
                 $data = "User data missing!";
-                return $response->withJson($data, 500);
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {      //if not logged in
-            $message = "Please log in to apply for this job";
             return $response->withRedirect('/v1/employee/error');
         }
     }
@@ -533,11 +611,15 @@ class EmployeeController
             }
             else{
                 $data = "Application for job not sent!";
-                return $response->withJson($data, 500);
+                try {
+                    echo $this->twig->render("page_error.twig", ['message' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
-            $message = "Please log in to apply for this job";
             return $response->withRedirect('/v1/employee/error');
         }
     }
@@ -577,12 +659,16 @@ class EmployeeController
                 }
                 else {
                     $data = "No applications found. Apply for a job now!";
-                    return $response->withJson($data, 400);
+                    try {
+                        echo $this->twig->render("page_error.twig", ['message' => $data]);
+                    } catch (\Twig\Error\LoaderError $e) {
+                    } catch (\Twig\Error\RuntimeError $e) {
+                    } catch (\Twig\Error\SyntaxError $e) {
+                    }
                 }
             }
         }
         else {
-            $message = "Please log in to view your job applications";
             return $response->withRedirect('/v1/employee/error');
         }
     }
@@ -623,24 +709,29 @@ class EmployeeController
         }
         else{
             $message = "No jobs found that match your criteria :(";
-            return $response->withJson($message, 400);
+            try {
+                echo $this->twig->render("page_error.twig", ['message' => $message]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
     }
 
     public function employerProfile(Request $request, Response $response, array $args){
-        if ($this->session->get('logged_in') == true) {
-            $employer_id = $args['employer_id'];
-            $sql_get_profile = $this->db->prepare
-            ("SELECT employer_profile.*, vacancies.* FROM employer_profile INNER JOIN vacancies ON employer_profile.employer_id = 
-                vacancies.employer_id WHERE employer_profile.employer_id = ?");
-            $result = $sql_get_profile->execute([$employer_id]);
-            $count = 0;
+        $employer_id = $args['employer_id'];
+        $sql_get_profile = $this->db->prepare
+        ("SELECT employer_profile.*, vacancies.* FROM employer_profile INNER JOIN vacancies ON employer_profile.employer_id = 
+            vacancies.employer_id WHERE employer_profile.employer_id = ?");
+        $result = $sql_get_profile->execute([$employer_id]);
+        $count = 0;
 
-            if ($result == true) {
-                while ($row = $sql_get_profile->fetch(PDO::FETCH_ASSOC)) {
-                    $employer[] = $row;
-                    $count++;
-                }
+        if ($result == true) {
+            while ($row = $sql_get_profile->fetch(PDO::FETCH_ASSOC)) {
+                $employer[] = $row;
+                $count++;
+            }
+            if($this->session->get('logged_in') == true){
                 try {
                     echo $this->twig->render("employer_profile.twig", ['name' => $this->session->get('first_name'),
                         'last_name' => $this->session->get('last_name'), 'employer' => $employer, 'count' => $count]);
@@ -650,18 +741,70 @@ class EmployeeController
                 }
             }
             else {
-                $data = "No data found, edit profile now";
+                try {
+                    echo $this->twig->render("a_employer_profile.twig", ['employer' => $employer, 'count' => $count]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
+
         }
         else {
-            $message = "Please log in to view this profile";
-            return $response->withRedirect('/v1/employee/error');
+            $data = "No data found, edit profile now";
+            try {
+                echo $this->twig->render("page_error.twig", ['message' => $data]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
     }
 
     public function error(Request $request, Response $response){
         try {
             echo $this->twig->render("error.twig");
+        } catch (\Twig\Error\LoaderError $e) {
+        } catch (\Twig\Error\RuntimeError $e) {
+        } catch (\Twig\Error\SyntaxError $e) {
+        }
+    }
+
+    protected function checkVacanciesExpiryDate(Request $request, Response $response){
+        $date = date('Y-m-d');
+        $sql_update_status = $this->db->prepare("UPDATE vacancies SET v_status = 0 WHERE vacancy_id = ?");
+        $sql_check_date = "SELECT vacancy_id, v_closing_date, v_status FROM vacancies WHERE v_status = 1";
+        $result = $this->db->query($sql_check_date);
+        $date_count = 0;
+
+        if ($result == true){
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)){
+                $v_date[] = $row;
+                $date_count++;
+            }
+            for ($i = 0; $i < $date_count; $i++){
+                if(strtotime($date) > strtotime($v_date[$i]['v_closing_date'])){
+                    $result_update_status = $sql_update_status->execute([$v_date[$i]['vacancy_id']]);
+                    if ($result_update_status == true){
+                        $message = "Vacancy status updated";
+                    }
+                    else {
+                        $message = "Oops, unable to update vacancy active status";
+                        return $response->withJson($message, 400);
+                    }
+                }
+                else{
+                    $message = "Vacancy not yet expired";
+                }
+            }
+        }
+        else{
+            $message = "Problem fetching data";
+        }
+    }
+    public function pageError(){
+        try {
+            echo $this->twig->render("page_error.twig");
         } catch (\Twig\Error\LoaderError $e) {
         } catch (\Twig\Error\RuntimeError $e) {
         } catch (\Twig\Error\SyntaxError $e) {

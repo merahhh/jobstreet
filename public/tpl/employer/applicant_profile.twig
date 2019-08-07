@@ -11,8 +11,8 @@
     <section class="hero-section bg-color" style="padding-top: 40px">
         {% for i in range (0,0) %}
         <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
+            <div class="row justify-content-center">
+                <div class="col-sm-10">
                     <div class="card">
                         <div class="card-header">
                             <div class="row">
@@ -33,18 +33,10 @@
                             </div>
                             <div class="row">
                                 <p class="card-text col-md-3">
-                                    <b>Age</b>
+                                    <b>Email</b>
                                 </p>
                                 <p class="card-text col-md-2 offset-md-2">
-                                    {{ applicant_profile[i].age }} years
-                                </p>
-                            </div>
-                            <div class="row">
-                                <p class="card-text col-md-3">
-                                    <b>Nationality</b>
-                                </p>
-                                <p class="card-text col-md-2 offset-md-2">
-                                    {{ applicant_proifle[i].nationality }}
+                                    {{ applicant_profile[i].email }}
                                 </p>
                             </div>
                             <hr class="horizontal-line">

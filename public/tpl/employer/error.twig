@@ -1,4 +1,4 @@
-{% extends "base.twig" %}
+{% extends "e_base.twig" %}
 
 {% block title %}
     Jobstreet.io | Please log in
@@ -15,9 +15,19 @@
             <div class="container">
                 <div class="row">
                     <div class="main-menu col align-self-start">
-                        <li><a href="/">Home</a></li>
+                        <li><a href="/v1/employer/">Home</a></li>
                         <li><a href="/about">About Us</a></li>
                         <li><a href="/v1/vacancies/all">Search Jobs</a></li>
+                    </div>
+                    <div class="user-panel col align-self-end text-right">
+                        <button id="header-login-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                data-target="#login-panel">Login</button>
+                        <span>/</span>
+                        <button id="header-register-btn" class="btn btn-link" type="submit" data-toggle="modal"
+                                data-target="#register-panel">Register</button>
+                        <span></span>
+
+                        <a id="header-employer-btn" class="btn btn-primary" type="button" href="/">Candidate Site</a>
                     </div>
                 </div>
             </div>
@@ -33,7 +43,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="alert alert-danger" role="alert">
-                                Please log in from the <a href="/">home page</a> to continue
+                                Please log in from the <a href="/v1/employer/">home page</a> to continue
                             </div>
                         </div>
                     </div>

@@ -10,15 +10,8 @@
     {% for i in range(0, 0) %}
     <section class="hero-section bg-color" style="padding-top: 40px">
         <div class="container">
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <img class="profile-picture card-img-top" src="../../img/20190614_173020.jpeg" alt="Profile Picture">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-9">
+            <div class="row justify-content-center">
+                <div class="col-sm-10">
                     <div class="card">
                         <div class="card-header">
                             <div class="row">
@@ -43,22 +36,13 @@
                             </div>
                             <div class="row">
                                 <p class="card-text col-md-3">
-                                    <b>Age</b>
+                                    <b>Email</b>
                                 </p>
                                 <p class="card-text col-md-2 offset-md-2">
-                                    {{ ep[i].age }} years
-                                </p>
-                            </div>
-                            <div class="row">
-                                <p class="card-text col-md-3">
-                                    <b>Nationality</b>
-                                </p>
-                                <p class="card-text col-md-2 offset-md-2">
-                                    {{ ep[i].nationality }}
+                                    {{ email }}
                                 </p>
                             </div>
                             <hr class="horizontal-line">
-
 
                             <h6 class="card-title">Education</h6>
                             <div class="row">

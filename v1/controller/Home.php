@@ -36,7 +36,8 @@ class Home
         else {
             try {
                 echo $this->twig_user->render("a_index.twig", ['is_login' => $this->session->get('is_login'), 'email_exist' => $this->session->get('email_exist'),
-                    'correct_pw' => $this->session->get('correct_pw')]);
+                    'correct_pw' => $this->session->get('correct_pw'), 'data' => $this->session->get('data'),
+                    'session' => $this->session]);
             } catch (\Twig\Error\LoaderError $e) {
             } catch (\Twig\Error\RuntimeError $e) {
             } catch (\Twig\Error\SyntaxError $e) {

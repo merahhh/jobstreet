@@ -13,6 +13,12 @@ $app->get('/about', Home::class . ':about');
 $app->group('/v1', function (App $app) {
 
     $app->group('/employee', function (App $app){
+        #login error page
+        $app->get('/error', EmployeeController::class . ':error');
+
+        #error page
+        $app->get('/page_error', EmployeeController::class . ':pageError');
+
         #register employee
         $app->post('/register', EmployeeController::class . ':registerEmployee');
 
@@ -49,14 +55,17 @@ $app->group('/v1', function (App $app) {
 
         #logout employee
         $app->post('/logout', EmployeeController::class . ':logoutEmployee');
-
-        #error page
-        $app->get('/error', EmployeeController::class . ':error');
     });
 
     $app->group('/employer', function (App $app){
         #index
         $app->get('/', Home::class . ':employersIndex');
+
+        #error page
+        $app->get('/error', EmployerController::class . ':error');
+
+        #error page
+        $app->get('/page_error', EmployerController::class . ':pageError');
 
         #register employer
         $app->post('/register', EmployerController::class . ':registerEmployer');
@@ -118,6 +127,9 @@ $app->group('/v1', function (App $app) {
 
         #error
         $app->get('/error', AdminController::class . ':error');
+
+        #error page
+        $app->get('/page_error', AdminController::class . ':pageError');
 
         #register
         $app->post('/register', AdminController::class . ':registerAdmin');

@@ -1,4 +1,4 @@
-{% extends "e_base.twig" %}
+{% extends "base.twig" %}
 
 {% block title %}
     {% for i in range(0, 0) %}
@@ -7,8 +7,23 @@
 {% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" href="/css/style.css">
     {{ parent() }}
+{% endblock %}
+
+{% block header %}
+    <header class="header-section">
+        <div class="header-warp">
+            <div class="container">
+                <div class="row">
+                    <div class="main-menu col align-self-start">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/v1/vacancies/all">Search Jobs</a></li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 {% endblock %}
 
 {% block section %}
@@ -52,7 +67,7 @@
                                     <div class="card-body">
                                         <h2 class="title">JOB DESCRIPTION</h2>
                                         <div id="job-desc" class="text-justify vacancy-details-small">
-                                            <div class="mb-0">
+                                            <div>
                                                 <strong>Responsibilities:</strong>
                                             </div>
                                             <p class="vacancy-details-body col-sm-12 pre-wrap-text">
@@ -87,10 +102,15 @@
                                                 Closing date: {{ vacancy_details[i].v_closing_date }}
                                             </p>
                                         </div>
+                                        <div class="col align-self-end text-right">
+                                            <form action="/v1/employee/vacancies/{{ vacancy_details[i].vacancy_id }}/application"
+                                                  method="get">
+                                                <button class="btn btn-primary">Apply Now</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-sm-6">
                                 <div class="card col-separation">
                                     <div class="card-body">
@@ -166,3 +186,4 @@
         {% endfor %}
     </section>
 {% endblock %}
+

@@ -515,6 +515,10 @@ div.pre-wrap-text {
 	background-color: #e5e5e5;
 }
 
+.bg-color-white {
+	background-color: #f2f2f2;
+}
+
 .bg-overlay,
 .bg-overlay-9 {
 	position: relative;

@@ -105,7 +105,7 @@ class AdminController
 
             if ($user == null){
                 //$data = 'Employee does not exist';
-                return $response->withRedirect('/v1/admin/');
+                return $response->withRedirect('/v1/admin/pageError');
             }
             else{
                 if (password_verify($password, $user['a_password'])){    #if password is correct
@@ -120,14 +120,19 @@ class AdminController
 
                 }
                 else{    #if password is incorrect
-                    //$data = 'Incorrect password';
-                    return $response->withRedirect('/v1/admin/');
+                    $data = 'Incorrect password.';
+                    try {
+                        echo $this->twig_admin->render("page_error.twig", ['message' => $data]);
+                    } catch (\Twig\Error\LoaderError $e) {
+                    } catch (\Twig\Error\RuntimeError $e) {
+                    } catch (\Twig\Error\SyntaxError $e) {
+                    }
                 }
             }
         }
         catch (exception $e){
             $data = 'Oops, something went wrong!';
-            return $response->withRedirect('/v1/admin/');
+            return $response->withRedirect('/v1/admin/pageError');
         }
     }
 
@@ -154,13 +159,16 @@ class AdminController
             session_destroy();
             $this->session->set('logged_in', false);
             //$this->session->destroySession();
-            $message = 'Successfully logged out!';
-            //return $response->withJson($message, 200);
             return $response->withRedirect('/v1/admin/');
 
         } catch (exception $e){
             $data = 'Oops, something went wrong!';
-            return $response->withJson($data, 300);
+            try {
+                echo $this->twig_admin->render("page_error.twig", ['message' => $data]);
+            } catch (\Twig\Error\LoaderError $e) {
+            } catch (\Twig\Error\RuntimeError $e) {
+            } catch (\Twig\Error\SyntaxError $e) {
+            }
         }
     }
 
@@ -187,19 +195,24 @@ class AdminController
                 }
             }
             else {
-                $data = "No data found for this job";
-                return $response->withJson($data, 400);
+                $data = "No data found for this job.";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
-            return $response->withRedirect('/v1/admin/error');
+            return $response->withRedirect('/v1/admin/pageError');
         }
     }
 
     public function viewAllVacancies(Request $request, Response $response){
         if ($this->session->get('admin_logged_in') == true){
             $sql_view_vacancies = "SELECT employer_id, vacancy_id, company_name, v_name, v_state, v_salary, v_desc, 
-            v_closing_date FROM vacancies";
+            v_closing_date FROM vacancies ORDER BY v_name ASC";
             $result = $this->db->query($sql_view_vacancies);
             $count = 0;
 
@@ -218,8 +231,13 @@ class AdminController
                 }
             }
             else {
-                $data = "No jobs found";
-                return $response->withJson($data, 400);
+                $data = "No jobs found.";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
@@ -240,11 +258,15 @@ class AdminController
             }
             else{
                 $message = "Unable to delete vacancy";
-                return $response->withJson($message, 500);
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to delete this vacancy";
             return $response->withRedirect('/v1/admin/error');
         }
     }
@@ -272,12 +294,16 @@ class AdminController
                 } catch (\Twig\Error\SyntaxError $e) {
                 }
             } else {
-                $message = "No employees with that name found";
-                return $response->withJson($message, 400);
+                $message = "No matching vacancies.";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
-            $message = "Please log in to delete this employee";
             return $response->withRedirect('/v1/admin/error');
         }
     }
@@ -305,8 +331,13 @@ class AdminController
                 }
             }
             else {
-                $message = "No data found, edit profile now";
-                return $response->withJson($message, 400);
+                $message = "No data found for this profile.";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
@@ -317,7 +348,7 @@ class AdminController
     public function viewAllEmployers(Request $request, Response $response){
         if ($this->session->get('admin_logged_in') == true) {
             $sql_view_employers = "SELECT employer_id, company_name, company_contact_person, company_contact_num, company_email
-                FROM employer";
+                FROM employer ORDER BY company_name ASC";
             $result = $this->db->query($sql_view_employers);
             $count = 0;
 
@@ -335,12 +366,16 @@ class AdminController
                 }
             }
             else {
-                $data = "No employers found";
-                return $response->withJson($data, 400);
+                $data = "No employers found!";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
-            $message = "Please log in to delete this vacancy";
             return $response->withRedirect('/v1/admin/error');
         }
     }
@@ -356,12 +391,16 @@ class AdminController
                 return $response->withRedirect('/v1/admin/employers');
             }
             else{
-                $message = "Unable to delete employer";
-                return $response->withJson($message, 500);
+                $message = "Unable to delete employer.";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to delete this employer";
             return $response->withRedirect('/v1/admin/error');
         }
     }
@@ -389,12 +428,16 @@ class AdminController
                 } catch (\Twig\Error\SyntaxError $e) {
                 }
             } else {
-                $message = "No employees with that name found";
-                return $response->withJson($message, 400);
+                $message = "No employers with that name found.";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
-            $message = "Please log in to delete this employee";
             return $response->withRedirect('/v1/admin/error');
         }
     }
@@ -420,19 +463,23 @@ class AdminController
                 }
             }
             else{
-                $message = "Unable to get employee info";
-                return $response->withJson($message, 500);
+                $message = "Unable to retrieve employee info.";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to view employees' profile";
             return $response->withRedirect('/v1/admin/error');
         }
     }
 
     public function viewAllEmployees(Request $request, Response $response){
         if ($this->session->get('admin_logged_in') == true) {
-            $sql_view_employees = "SELECT id, first_name, last_name, email, contact FROM employee";
+            $sql_view_employees = "SELECT id, first_name, last_name, email, contact FROM employee ORDER BY first_name ASC";
             $result = $this->db->query($sql_view_employees);
             $count = 0;
 
@@ -450,12 +497,16 @@ class AdminController
                 }
             }
             else {
-                $data = "No employees found";
-                return $response->withJson($data, 400);
+                $data = "No employees found!";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $data]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
-            $message = "Please log in to view the employees list";
             return $response->withRedirect('/v1/admin/error');
         }
     }
@@ -471,12 +522,16 @@ class AdminController
                 return $response->withRedirect('/v1/admin/employees');
             }
             else{
-                $message = "Unable to delete employee";
-                return $response->withJson($message, 500);
+                $message = "Unable to delete employee.";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else{
-            $message = "Please log in to delete this employee";
             return $response->withRedirect('/v1/admin/error');
         }
     }
@@ -504,12 +559,16 @@ class AdminController
                 } catch (\Twig\Error\SyntaxError $e) {
                 }
             } else {
-                $message = "No employees with that name found";
-                return $response->withJson($message, 400);
+                $message = "No employees with that name found!";
+                try {
+                    echo $this->twig_admin->render("page_error.twig", ['message' => $message]);
+                } catch (\Twig\Error\LoaderError $e) {
+                } catch (\Twig\Error\RuntimeError $e) {
+                } catch (\Twig\Error\SyntaxError $e) {
+                }
             }
         }
         else {
-            $message = "Please log in to delete this employee";
             return $response->withRedirect('/v1/admin/error');
         }
     }
@@ -517,6 +576,15 @@ class AdminController
     public function error(Request $request, Response $response){
         try {
             echo $this->twig_admin->render("error.twig");
+        } catch (\Twig\Error\LoaderError $e) {
+        } catch (\Twig\Error\RuntimeError $e) {
+        } catch (\Twig\Error\SyntaxError $e) {
+        }
+    }
+
+    public function pageError(){
+        try {
+            echo $this->twig->render("page_error.twig");
         } catch (\Twig\Error\LoaderError $e) {
         } catch (\Twig\Error\RuntimeError $e) {
         } catch (\Twig\Error\SyntaxError $e) {

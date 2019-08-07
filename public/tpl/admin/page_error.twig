@@ -1,7 +1,7 @@
-{% extends "base.twig" %}
+{% extends "a_base.twig" %}
 
 {% block title %}
-    Jobstreet.io | Please log in
+    Jobstreet.io
 {% endblock %}
 
 {% block head %}
@@ -15,9 +15,7 @@
             <div class="container">
                 <div class="row">
                     <div class="main-menu col align-self-start">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/v1/vacancies/all">Search Jobs</a></li>
+                        <li><a href="/v1/admin/">Home</a></li>
                     </div>
                 </div>
             </div>
@@ -26,14 +24,14 @@
 {% endblock %}
 
 {% block section %}
-    <section class="hero-section bg-color-white" style="padding-top: 40px">
+    <section class="hero-section bg-color" style="padding-top: 40px">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="alert alert-danger" role="alert">
-                                Please log in from the <a href="/">home page</a> to continue
+                                <strong>Error!</strong>{{ message }}
                             </div>
                         </div>
                     </div>

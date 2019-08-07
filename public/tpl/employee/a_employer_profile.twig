@@ -7,6 +7,22 @@
     {{ parent() }}
 {% endblock %}
 
+{% block header %}
+    <header class="header-section">
+        <div class="header-warp">
+            <div class="container">
+                <div class="row">
+                    <div class="main-menu col align-self-start">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/v1/vacancies/all">Search Jobs</a></li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
 {% block section %}
     <section class="hero-section bg-color" style="padding-top: 40px">
         {% for i in range(0, 0) %}
@@ -127,7 +143,8 @@
                                                                         {{ employer[x].v_name }}
                                                                     </a>
                                                                 </h5>
-                                                                <p class="card-subtitle mb-2 card-link">{{ employer[x].company_name }}</p>
+                                                                {#                                                                <h6><a href="#" class="card-subtitle mb-2 card-link">#}
+                                                                {#                                                                        {{ employer[x].company_name }}</a></h6>#}
                                                                 <ul id="job_desc_summary" class="list-unstyled" style="margin-top: 5px;">
                                                                     <li id="job_position" class="job-position">
                                                                         <i class="icon fas fa-suitcase"></i>

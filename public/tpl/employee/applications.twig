@@ -12,66 +12,35 @@
     <div class="container">
         <div class="card d-flex justify-content-center" style="margin-left: 15%; margin-right: 15%;">
             <div class="card-header">
-                <div class="row">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="active-app-tab" data-toggle="tab" href="#active-app"
-                               role="tab" aria-controls="home" aria-selected="true">Active Applications</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="all-app-tab" data-toggle="tab" href="#all-app"
-                               role="tab" aria-controls="home" aria-selected="true">All Applications ({{ count }})</a>
-                    </ul>
+                <div class="container">
+                    <div class="row">
+                        Applications
+                    </div>
                 </div>
             </div>
             <div class="card-body">
                 <div class="tab-content">
-                    <div class="tab-pane fade active" id="active-app" role="tabpanel" aria-labelledby="active-app-tab">
-                        {% for i in range(0, count-1) %}
-                            <h6><a href="/v1/vacancies/{{ applications[i].vacancy_id }}" class="card-title">{{ applications[i].v_name }}</a>
-                                (<a href="/v1/employee/vacancies/profile/{{ applications[i].employer_id }}">{{ applications[i].company_name }}</a>)</h6>
-                            <div class="row">
-                                <p class="card-text col-md-3">
-                                    <b>Date Submitted</b>
-                                </p>
-                                <p class="card-text col-md-4 offset-md-2">
-                                    {{ applications[i].date_submitted }}
-                                </p>
-                            </div>
-                            <div class="row">
-                                <p class="card-text col-md-3">
-                                    <b>Application Status</b>
-                                </p>
-                                <p class="card-text col-md-4 offset-md-2">
-                                    {{ applications[i].application_status }}
-                                </p>
-                            </div>
-                            <hr class="horizontal-line">
-                        {% endfor %}
-                    </div>
-                    <div class="tab-pane fade" id="all-app" role="tabpanel" aria-labelledby="all-app-tab">
-                        {% for i in range(0, count-1) %}
-                            <h6><a href="/v1/vacancies/{{ applications[i].vacancy_id }}" class="card-title">{{ applications[i].v_name }}</a>
-                                (<a href="/v1/employee/vacancies/profile/{{ applications[i].employer_id }}">{{ applications[i].company_name }}</a>)</h6>
-                            <div class="row">
-                                <p class="card-text col-md-3">
-                                    <b>Date Submitted</b>
-                                </p>
-                                <p class="card-text col-md-4 offset-md-2">
-                                    {{ applications[i].date_submitted }}
-                                </p>
-                            </div>
-                            <div class="row">
-                                <p class="card-text col-md-3">
-                                    <b>Application Status</b>
-                                </p>
-                                <p class="card-text col-md-4 offset-md-2">
-                                    {{ applications[i].application_status }}
-                                </p>
-                            </div>
-                            <hr class="horizontal-line">
-                        {% endfor %}
-                    </div>
+                    {% for i in range(0, count-1) %}
+                        <h6><a href="/v1/vacancies/{{ applications[i].vacancy_id }}" class="card-title">{{ applications[i].v_name }}</a>
+                            (<a href="/v1/employee/vacancies/profile/{{ applications[i].employer_id }}">{{ applications[i].company_name }}</a>)</h6>
+                        <div class="row">
+                            <p class="card-text col-md-3">
+                                <b>Date Submitted</b>
+                            </p>
+                            <p class="card-text col-md-4 offset-md-2">
+                                {{ applications[i].date_submitted }}
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="card-text col-md-3">
+                                <b>Application Status</b>
+                            </p>
+                            <p class="card-text col-md-4 offset-md-2">
+                                {{ applications[i].application_status }}
+                            </p>
+                        </div>
+                        <hr class="horizontal-line">
+                    {% endfor %}
                 </div>
             </div>
         </div>
