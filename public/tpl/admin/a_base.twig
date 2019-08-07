@@ -25,30 +25,42 @@
     {% endblock %}
 </head>
 <body>
-{% block header %}
-    <header class="header-section">
-        <div class="header-warp">
-            <div class="container">
-                <div class="row">
-                    <div class="main-menu col col-sm-8 align-self-start">
-                        <li><a href="/v1/admin/">Home</a></li>
-                        <li><a href="/v1/admin/vacancies">Manage Jobs</a></li>
-                        <li><a href="/v1/admin/employers">Manage Employers</a></li>
-                        <li><a href="/v1/admin/employees">Manage Candidates</a></li>
-                    </div>
-                    <div class="user-panel col align-self-end text-right">
-                        <form method="post" action="/v1/admin/logout">
-                            Hello, Admin {{ name }}! <button id="header-logout-btn" class="btn btn-link">Logout</button>
-                        </form>
+    {% block header %}
+        <header class="header-section">
+            <div class="header-warp">
+                <div class="container">
+                    <div class="row">
+                        <div class="main-menu col col-sm-8 align-self-start">
+                            <li><a href="/v1/admin/">Home</a></li>
+                            <li><a href="/v1/admin/vacancies">Manage Jobs</a></li>
+                            <li><a href="/v1/admin/employers">Manage Employers</a></li>
+                            <li><a href="/v1/admin/employees">Manage Candidates</a></li>
+                        </div>
+                        <div class="user-panel col align-self-end text-right">
+                            <form method="post" action="/v1/admin/logout">
+                                Hello, Admin {{ name }}!
+                                <button id="logout" name="logout" class="btn btn-link">Logout</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
-{% endblock %}
+        </header>
+    {% endblock %}
 
-<section id="section">{% block section %}{% endblock %}</section>
+    <section id="section">{% block section %}{% endblock %}</section>
 
+    <script type="text/javascript">
+        $(function logout(){
+            $('#logout').on('click', function (f) {
+                let status = confirm('Are you sure you want to log out?');
+                if (!status){
+                    f.preventDefault();
+                    return false;
+                }
+            })
+        });
+    </script>
 </body>
 <footer class="footer-section">
     {% block footer %}
