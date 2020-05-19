@@ -1,8 +1,8 @@
 # Jobstreet clone
 Just a project I had done during internship to help me improve my web development skills. Not the best but a sister tried lmao.
-Inspired by https://jobstreet.com.my.
+Inspired by https://jobstreet.com.my. Written in PHP with Slim micro framework and Twig templating engine + CSS.
 
-Functionalities:
+## Functionalities:
 
 1. Login/Sign Up as Company and User
 2. Add new job listing
@@ -11,5 +11,3 @@ Functionalities:
 5. User profile
 6. View job listings with search function
 7. Apply for job 
-
-Written in PHP with Slim micro framework and Twig templating engine + CSS.
