@@ -11,3 +11,5 @@ Functionalities:
 5. User profile
 6. View job listings with search function
 7. Apply for job 
+
+Written in PHP with Slim micro framework and Twig templating engine + CSS.
